@@ -1,7 +1,5 @@
 package com.andre.model;
 
-import java.util.Map;
-
 public class SummaryObjectVO {
 	
 	private String id;
@@ -16,10 +14,8 @@ public class SummaryObjectVO {
 	
 	private String coveredValue;
 	
-	private int recomendation;
+	private String recomendation;
 	
-	private Map<Integer,String> mapRecommendations;
-
 	public String getId() {
 		return id;
 	}
@@ -60,20 +56,12 @@ public class SummaryObjectVO {
 		this.coveredValue = coveredValue;
 	}
 
-	public int getRecomendation() {
+	public String getRecomendation() {
 		return recomendation;
 	}
 
-	public void setRecomendation(int recomendation) {
+	public void setRecomendation(String recomendation) {
 		this.recomendation = recomendation;
-	}
-
-	public Map<Integer, String> getMapRecommendations() {
-		return mapRecommendations;
-	}
-
-	public void setMapRecommendations(Map<Integer, String> mapRecommendations) {
-		this.mapRecommendations = mapRecommendations;
 	}
 
 }

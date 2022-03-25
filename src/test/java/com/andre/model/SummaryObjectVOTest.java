@@ -2,8 +2,6 @@ package com.andre.model;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,16 +52,9 @@ public class SummaryObjectVOTest {
 
 	@Test
 	public void testGetterAndSetters_setAnotherRecomendation() {
-		var expectedResult = 1;
-		summaryObject.setRecomendation(1);
+		var expectedResult = "1";
+		summaryObject.setRecomendation("1");
 		assertEquals(expectedResult, summaryObject.getRecomendation());
-	}
-
-	@Test
-	public void testGetterAndSetters_setMapRecommendations() {
-		var expectedResult = new HashMap<Integer,String>();
-		summaryObject.setMapRecommendations(expectedResult);
-		assertEquals(expectedResult, summaryObject.getMapRecommendations());
 	}
 
 }

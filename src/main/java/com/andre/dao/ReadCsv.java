@@ -12,8 +12,14 @@ import com.andre.model.SummaryObjectVO;
 @Component
 public class ReadCsv {
 	
+	private String fileInPath;
+	
+	public void setFileInPath(String fileInPath) {
+		this.fileInPath = fileInPath;
+	}
+
 	public List<SummaryObjectVO> readCSVFile() {
-		try (var br = new BufferedReader( new FileReader("./src/main/resources/Summarys.csv"))) {
+		try (var br = new BufferedReader( new FileReader(fileInPath))) {
 			var rs = new ArrayList<SummaryObjectVO>();
 			
 			String sCurrentLine="";
@@ -39,18 +45,19 @@ public class ReadCsv {
 	}
 	
 	private List<String> split(String in){
-		var fill = false;
 		var storedResult = new StringBuilder();
 		var valuesList = new ArrayList<String>();
+		var regular = true;
 		for(var i=0; i<in.length(); i++) {
-			if(fill && in.charAt(i)!=',' && in.charAt(i)!='\"')  storedResult.append(in.charAt(i));
-			if(in.charAt(i)==',' && !fill) fill = true; 
-			if(in.charAt(i)==',' && fill) {
+			if(in.charAt(i)!=',' && in.charAt(i)!='\"' && regular)  storedResult.append(in.charAt(i));
+			else if(in.charAt(i)!='\"' && !regular)  storedResult.append(in.charAt(i));
+			if(in.charAt(i)=='\"') regular = !regular;
+			if((in.charAt(i)==',' || i==in.length()-1) && regular) {
 				valuesList.add(storedResult.toString());
 				storedResult = new StringBuilder();
-				fill = false; 
 			}
 		}
+		System.out.println(valuesList);
 		return valuesList;
 	}
 	
@@ -60,13 +67,15 @@ public class ReadCsv {
 			var a = i+1;
 			if(a==1) {
 				summaryObject.setStudent(list.get(i));
-			}else if(a==2) {
+			} else if(a==2) {
 				summaryObject.setStatus(list.get(i));
-			}else if(a==3) {
+			} else if(a==3) {
 				if(list.get(i).equals("1")) summaryObject.setMadeADifference(true);
 				if(list.get(i).equals("0")) summaryObject.setMadeADifference(false);
-			}else if(a==4) {
+			} else if(a==4) {
 				summaryObject.setCoveredValue(list.get(i));
+			} else if(a==5) {
+				summaryObject.setRecomendation(list.get(i));
 			}
 		}
 		

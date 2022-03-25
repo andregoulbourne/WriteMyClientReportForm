@@ -9,6 +9,8 @@ public class Driver {
 	public static void main(String[] args) {
 		System.out.println("Hello World");
 		
+		reader.setFileInPath("./src/main/resources/Summarys.csv");
+		
 		reader.readCSVFile();
 		
 	}
