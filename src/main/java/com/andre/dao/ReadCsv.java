@@ -12,8 +12,6 @@ import com.andre.model.SummaryObjectVO;
 @Component
 public class ReadCsv {
 	
-	private SummaryObjectVO summaryObject;
-	
 	public List<SummaryObjectVO> readCSVFile() {
 		try (var br = new BufferedReader( new FileReader("./src/main/resources/Summarys.csv"))) {
 			var rs = new ArrayList<SummaryObjectVO>();
@@ -37,7 +35,7 @@ public class ReadCsv {
 		} catch(Exception e) {
 			System.out.println("An Exception occured "+ e);
 		}
-		return null;
+		return new ArrayList<>();
 	}
 	
 	private List<String> split(String in){
@@ -57,7 +55,7 @@ public class ReadCsv {
 	}
 	
 	private SummaryObjectVO listToObject(List<String> list) {
-		summaryObject = new SummaryObjectVO();
+		var summaryObject = new SummaryObjectVO();
 		for(var i=0; i<list.size(); i++) {
 			var a = i+1;
 			if(a==1) {
