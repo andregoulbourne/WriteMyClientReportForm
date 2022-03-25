@@ -1,3 +1,0 @@
-INDEX VERSION 1.131+C:\Users\andre\Desktop\WriteMyClientReportForms\.metadata\.plugins\org.eclipse.jdt.core
-1060234736.index
-2038646211.index
