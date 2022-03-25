@@ -16,6 +16,16 @@ public class SummaryObjectVO {
 	
 	private String recomendation;
 	
+	private String gender;
+	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -63,5 +73,14 @@ public class SummaryObjectVO {
 	public void setRecomendation(String recomendation) {
 		this.recomendation = recomendation;
 	}
+
+	@Override
+	public String toString() {
+		return "SummaryObjectVO [id=" + id + ", student=" + student + ", status=" + status + ", madeADifference="
+				+ madeADifference + ", coveredValue=" + coveredValue + ", recomendation=" + recomendation + ", gender="
+				+ gender + "]";
+	}
+
+	
 
 }

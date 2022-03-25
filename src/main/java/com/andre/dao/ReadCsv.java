@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.andre.model.SummaryObjectVO;
 
-@Component
 public class ReadCsv {
 	
 	private String fileInPath;
@@ -67,6 +66,7 @@ public class ReadCsv {
 			var a = i+1;
 			if(a==1) {
 				summaryObject.setStudent(list.get(i));
+				summaryObject.setId(String.valueOf(a));
 			} else if(a==2) {
 				summaryObject.setStatus(list.get(i));
 			} else if(a==3) {
@@ -76,6 +76,9 @@ public class ReadCsv {
 				summaryObject.setCoveredValue(list.get(i));
 			} else if(a==5) {
 				summaryObject.setRecomendation(list.get(i));
+			} else if(a==6) {
+				if(list.get(i).equalsIgnoreCase("M")) summaryObject.setGender("he");
+				if(list.get(i).equalsIgnoreCase("F")) summaryObject.setGender("she");
 			}
 		}
 		

@@ -56,5 +56,12 @@ public class SummaryObjectVOTest {
 		summaryObject.setRecomendation("1");
 		assertEquals(expectedResult, summaryObject.getRecomendation());
 	}
+	
+	@Test
+	public void testGetterAndSetters_setGender() {
+		var expectedResult = "1";
+		summaryObject.setGender("1");
+		assertEquals(expectedResult, summaryObject.getGender());
+	}
 
 }
