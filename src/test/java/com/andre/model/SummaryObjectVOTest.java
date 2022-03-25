@@ -31,16 +31,9 @@ public class SummaryObjectVOTest {
 	}
 	
 	@Test
-	public void testGetterAndSetters_setAnotherStatusStart() {
-		var expectedResult = 1;
-		summaryObject.setStatusStart(1);
-		assertEquals(expectedResult, summaryObject.getStatusStart());
-	}
-
-	@Test
 	public void testGetterAndSetters_setAnotherStatus() {
-		var expectedResult = new HashMap<Integer,String>();
-		summaryObject.setStatus(expectedResult);
+		var expectedResult = "1";
+		summaryObject.setStatus("1");
 		assertEquals(expectedResult, summaryObject.getStatus());
 	}
 
@@ -51,12 +44,6 @@ public class SummaryObjectVOTest {
 		assertEquals(expectedResult, summaryObject.isMadeADifference());
 	}
 
-	@Test
-	public void testGetterAndSetters_setAnotherCoveredKey() {
-		var expectedResult = "coveredKey";
-		summaryObject.setCoveredKey("coveredKey");
-		assertEquals(expectedResult, summaryObject.getCoveredKey());
-	}
 
 	@Test
 	public void testGetterAndSetters_setAnotherCoveredValue() {

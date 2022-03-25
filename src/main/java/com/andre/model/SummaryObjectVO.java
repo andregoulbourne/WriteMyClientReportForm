@@ -9,18 +9,12 @@ public class SummaryObjectVO {
 	private String student;
 	
 	//The students feelings or read on the students level in the subject
-	private int statusStart;
-	
-	private Map<Integer,String> status;
+	private String status;
 
 
 	private boolean madeADifference;
 	
-	
-	private String coveredKey;
-	
 	private String coveredValue;
-	
 	
 	private int recomendation;
 	
@@ -42,21 +36,12 @@ public class SummaryObjectVO {
 		this.student = student;
 	}
 	
-	public Map<Integer, String> getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Map<Integer, String> status) {
+	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public void setStatusStart(int statusStart) {
-		this.statusStart = statusStart;
-	}
-	
-
-	public int getStatusStart() {
-		return statusStart;
 	}
 
 	public boolean isMadeADifference() {
@@ -65,14 +50,6 @@ public class SummaryObjectVO {
 
 	public void setMadeADifference(boolean madeADifference) {
 		this.madeADifference = madeADifference;
-	}
-
-	public String getCoveredKey() {
-		return coveredKey;
-	}
-
-	public void setCoveredKey(String coveredKey) {
-		this.coveredKey = coveredKey;
 	}
 
 	public String getCoveredValue() {
