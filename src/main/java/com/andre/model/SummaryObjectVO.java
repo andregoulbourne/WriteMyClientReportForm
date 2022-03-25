@@ -8,11 +8,12 @@ public class SummaryObjectVO {
 	
 	private String student;
 	
-	private String subject;
-	
 	//The students feelings or read on the students level in the subject
-	private String statusStart;
+	private int statusStart;
 	
+	private Map<Integer,String> status;
+
+
 	private boolean madeADifference;
 	
 	
@@ -40,21 +41,22 @@ public class SummaryObjectVO {
 	public void setStudent(String student) {
 		this.student = student;
 	}
-
-	public String getSubject() {
-		return subject;
+	
+	public Map<Integer, String> getStatus() {
+		return status;
 	}
 
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setStatus(Map<Integer, String> status) {
+		this.status = status;
 	}
 
-	public String getStatusStart() {
-		return statusStart;
-	}
-
-	public void setStatusStart(String statusStart) {
+	public void setStatusStart(int statusStart) {
 		this.statusStart = statusStart;
+	}
+	
+
+	public int getStatusStart() {
+		return statusStart;
 	}
 
 	public boolean isMadeADifference() {
