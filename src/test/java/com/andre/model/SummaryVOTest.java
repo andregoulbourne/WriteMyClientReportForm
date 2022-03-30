@@ -5,13 +5,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SummaryObjectVOTest {
+public class SummaryVOTest {
 
-	private SummaryObjectVO summaryObject;
+	private SummaryVO summaryObject;
 
 	@Before
 	public void setup() {
-		this.summaryObject = new SummaryObjectVO();
+		this.summaryObject = new SummaryVO();
 	}
 
 	@Test

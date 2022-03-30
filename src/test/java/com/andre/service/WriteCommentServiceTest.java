@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.andre.model.SummaryObjectVO;
+import com.andre.model.SummaryVO;
 
 public class WriteCommentServiceTest {
 	
@@ -23,8 +23,8 @@ public class WriteCommentServiceTest {
 				+ "\r\n"
 				+ "\r\n";
 		
-		var givenList = new ArrayList<SummaryObjectVO>();
-		var object = new SummaryObjectVO();
+		var givenList = new ArrayList<SummaryVO>();
+		var object = new SummaryVO();
 		object.setStudent("Andre");
 		object.setStatus("3");
 		object.setMadeADifference(true);

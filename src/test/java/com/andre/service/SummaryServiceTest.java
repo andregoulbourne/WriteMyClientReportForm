@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.andre.dao.SummaryDao;
-import com.andre.model.SummaryObjectVO;
+import com.andre.model.SummaryVO;
 
 public class SummaryServiceTest {
 	
@@ -24,7 +24,7 @@ public class SummaryServiceTest {
 	
 	@Test
 	public void testGetAllSummary(){
-		var rs = new ArrayList<SummaryObjectVO>();
+		var rs = new ArrayList<SummaryVO>();
 		Mockito.when(dao.readCSVFile()).thenReturn(rs);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
@@ -35,14 +35,14 @@ public class SummaryServiceTest {
 	
 	@Test
 	public void testGetASummary() {
-		var rs = new SummaryObjectVO();
+		var rs = new SummaryVO();
 		Mockito.when(dao.readCSVFileSingleEntry(id)).thenReturn(rs);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(rs,service.getASummary(id));
 	}
 	
-	private static final SummaryObjectVO o = new SummaryObjectVO();
+	private static final SummaryVO o = new SummaryVO();
 	
 	@Test
 	public void testUpdateSummary() {

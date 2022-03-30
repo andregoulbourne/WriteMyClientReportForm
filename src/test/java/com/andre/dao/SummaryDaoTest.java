@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.andre.model.SummaryObjectVO;
+import com.andre.model.SummaryVO;
 
 public class SummaryDaoTest {
 	
@@ -22,8 +22,8 @@ public class SummaryDaoTest {
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		var expected = new ArrayList<SummaryObjectVO>();
-		var object = new SummaryObjectVO();
+		var expected = new ArrayList<SummaryVO>();
+		var object = new SummaryVO();
 		object.setId("1");
 		object.setStudent("Mike");
 		object.setStatus("1");
@@ -33,7 +33,7 @@ public class SummaryDaoTest {
 		object.setGender("M");
 		expected.add(object);
 		
-		var object1 = new SummaryObjectVO();
+		var object1 = new SummaryVO();
 		object1.setId("2");
 		object1.setStudent("Saddy");
 		object1.setStatus("0");
@@ -59,7 +59,7 @@ public class SummaryDaoTest {
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		var object = new SummaryObjectVO();
+		var object = new SummaryVO();
 		object.setId("1");
 		object.setStudent("Mike");
 		object.setStatus("1");
@@ -86,7 +86,7 @@ public class SummaryDaoTest {
 		
 		assertEquals(0,reader.updateCSVFile(null));
 		
-		var o = new SummaryObjectVO();
+		var o = new SummaryVO();
 		o.setStudent("Mike");
 		o.setId("1");
 		
@@ -107,7 +107,7 @@ public class SummaryDaoTest {
 		
 		assertEquals(0,reader.addCSVFileEntry(null));
 		
-		var o = new SummaryObjectVO();
+		var o = new SummaryVO();
 		o.setId("3");
 		o.setCoveredValue("agag");
 		o.setGender("he");

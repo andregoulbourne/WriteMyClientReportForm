@@ -1,7 +1,7 @@
 package com.andre;
 
 import com.andre.dao.SummaryDao;
-import com.andre.model.SummaryObjectVO;
+import com.andre.model.SummaryVO;
 import com.andre.service.WriteCommentService;
 
 public class Driver {
@@ -15,7 +15,7 @@ public class Driver {
 		
 		reader.setFileInPath("./src/main/resources/Summarys.csv");
 		
-		var o = new SummaryObjectVO();
+		var o = new SummaryVO();
 		o.setStudent("Mike");
 		o.setId("1");
 		

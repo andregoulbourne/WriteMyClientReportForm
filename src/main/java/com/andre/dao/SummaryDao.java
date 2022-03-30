@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.andre.model.SummaryObjectVO;
+import com.andre.model.SummaryVO;
 
 @Repository
 public class SummaryDao{
@@ -26,10 +26,10 @@ public class SummaryDao{
 	
 	private static final String CURRENTLINE = "current Line Is ... %s";
 	
-	public List<SummaryObjectVO> readCSVFile() {
+	public List<SummaryVO> readCSVFile() {
 		
 		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryObjectVO>();
+			var rs = new ArrayList<SummaryVO>();
 			
 			String sCurrentLine="";
 			var firstRow = true;
@@ -54,10 +54,10 @@ public class SummaryDao{
 	}
 	
 	
-	public SummaryObjectVO readCSVFileSingleEntry(String id) {
+	public SummaryVO readCSVFileSingleEntry(String id) {
 		
 		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new SummaryObjectVO();
+			var rs = new SummaryVO();
 			
 			String sCurrentLine="";
 			var firstRow = true;
@@ -79,12 +79,12 @@ public class SummaryDao{
 		} catch(Exception e) {
 			logger.error(EXCEPTION, e);
 		}
-		return new SummaryObjectVO();
+		return new SummaryVO();
 	}
 	
 	private static final String EXCEPTION = "An Exception occured ...";
 	
-	public int updateCSVFile(SummaryObjectVO o) {
+	public int updateCSVFile(SummaryVO o) {
 		try {
 			var rs = updateCSVFilePart1(o);
 			return updateCSVPart2(rs);
@@ -94,7 +94,7 @@ public class SummaryDao{
 		}
 	}
 	
-	public int addCSVFileEntry(SummaryObjectVO o) {
+	public int addCSVFileEntry(SummaryVO o) {
 		try {
 			var rs = addCSVFileEntryPart1(o);
 			return updateCSVPart2(rs);
@@ -104,7 +104,7 @@ public class SummaryDao{
 		}
 	}
 	
-	public int deleteCSVFileEntry(SummaryObjectVO o) {
+	public int deleteCSVFileEntry(SummaryVO o) {
 		try {
 			var rs = deleteCSVFileEntryPart1(o);
 			return updateCSVPart2(rs);
@@ -114,12 +114,12 @@ public class SummaryDao{
 		}
 	}
 	
-	private List<SummaryObjectVO> updateCSVFilePart1(SummaryObjectVO o) {
+	private List<SummaryVO> updateCSVFilePart1(SummaryVO o) {
 		var id = o.getId();
 		if(id==null) return new ArrayList<>();
 		
 		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryObjectVO>();
+			var rs = new ArrayList<SummaryVO>();
 			
 			String sCurrentLine="";
 			var firstRow = true;
@@ -149,12 +149,12 @@ public class SummaryDao{
 		return new ArrayList<>();
 	}
 	
-	private List<SummaryObjectVO> addCSVFileEntryPart1(SummaryObjectVO o) {
+	private List<SummaryVO> addCSVFileEntryPart1(SummaryVO o) {
 		var id = o.getId();
 		if(id==null) return new ArrayList<>();
 		
 		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryObjectVO>();
+			var rs = new ArrayList<SummaryVO>();
 			
 			String sCurrentLine="";
 			var firstRow = true;
@@ -186,7 +186,7 @@ public class SummaryDao{
 		return new ArrayList<>();
 	}
 	
-	private List<SummaryObjectVO> deleteCSVFileEntryPart1(SummaryObjectVO o) {
+	private List<SummaryVO> deleteCSVFileEntryPart1(SummaryVO o) {
 		var id = o.getId();
 		if(id==null) return new ArrayList<>();
 		var entry=readCSVFileSingleEntry(id);
@@ -194,7 +194,7 @@ public class SummaryDao{
 		if(entry.getId()==null) return new ArrayList<>();
 		
 		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryObjectVO>();
+			var rs = new ArrayList<SummaryVO>();
 			
 			String sCurrentLine="";
 			var firstRow = true;
@@ -221,7 +221,7 @@ public class SummaryDao{
 	}
 	
 	//Makes a new string for the Entry to be written to the Print Writer
-	public String getAnEntry(SummaryObjectVO o) {
+	public String getAnEntry(SummaryVO o) {
 		try {
 			var list = objectToList(o);
 			return unsplit(list);
@@ -231,7 +231,7 @@ public class SummaryDao{
 		return "";
 	}
 	
-	private SummaryObjectVO updateObjectNullFields(SummaryObjectVO existing, SummaryObjectVO rs) {
+	private SummaryVO updateObjectNullFields(SummaryVO existing, SummaryVO rs) {
 		try {
 			if(rs.getId()==null) rs.setId(existing.getId());
 			if(rs.getCoveredValue()==null) rs.setCoveredValue(existing.getCoveredValue());
@@ -243,13 +243,13 @@ public class SummaryDao{
 			return rs;
 		} catch(Exception e) {
 			logger.error(EXCEPTION,e);
-			return new SummaryObjectVO();
+			return new SummaryVO();
 		}
 	}
 	
 	private static final String HEADER = "ID,STUDENT_NAME,STATUS,MADE_A_DIFFERENCE,COVERED_VALUE,RECOMMENDATION,GENDER";
 	
-	private int updateCSVPart2(List<SummaryObjectVO> list) {
+	private int updateCSVPart2(List<SummaryVO> list) {
 		var rs = new ArrayList<String>();
 		
 		if(list.isEmpty() || fileInPath==null) {
@@ -257,7 +257,7 @@ public class SummaryDao{
 			return 0;
 		}
 		
-		for(SummaryObjectVO o: list) {
+		for(SummaryVO o: list) {
 			var entryString=getAnEntry(o);
 			if(!entryString.isEmpty()) rs.add(entryString);
 		}
@@ -301,10 +301,10 @@ public class SummaryDao{
 		return rs.toString();
 	}
 	
-	private SummaryObjectVO summaryObject;
+	private SummaryVO summaryObject;
 	
-	private SummaryObjectVO listToObject(List<String> list) {
-		summaryObject = new SummaryObjectVO();
+	private SummaryVO listToObject(List<String> list) {
+		summaryObject = new SummaryVO();
 		for(var i=0; i<list.size(); i++) {
 			var a = i+1;
 			if(a==1) {
@@ -327,7 +327,7 @@ public class SummaryDao{
 		return summaryObject;
 	}
 	
-	private List<String> objectToList(SummaryObjectVO o){
+	private List<String> objectToList(SummaryVO o){
 		var rs = new ArrayList<String>();
 		rs.add(o.getId());
 		rs.add(o.getStudent());

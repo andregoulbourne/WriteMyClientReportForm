@@ -2,11 +2,11 @@ package com.andre.service;
 
 import java.util.List;
 
-import com.andre.model.SummaryObjectVO;
+import com.andre.model.SummaryVO;
 
 public class WriteCommentService {
 	
-	public String writeComment(List<SummaryObjectVO> list) {
+	public String writeComment(List<SummaryVO> list) {
 		var rs = new StringBuilder();
 		for(var i=0; i<list.size();i++) {
 			var object = list.get(i);

@@ -1,6 +1,6 @@
 package com.andre.model;
 
-public class SummaryObjectVO {
+public class SummaryVO {
 	
 	private String id;
 	
