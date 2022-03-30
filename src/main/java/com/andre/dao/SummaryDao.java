@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import com.andre.model.SummaryObjectVO;
 
+@Repository
 public class SummaryDao{
 	
 	private static final Logger logger = Logger.getLogger(SummaryDao.class);
@@ -75,20 +77,9 @@ public class SummaryDao{
 				
 			}
 		} catch(Exception e) {
-			logger.error("An Exception occured ...", e);
+			logger.error(EXCEPTION, e);
 		}
 		return new SummaryObjectVO();
-	}
-	
-	//Makes a new string for the Entry to be written to the Print Writer
-	public String getAnEntry(SummaryObjectVO o) {
-		try {
-			var list = objectToList(o);
-			return unsplit(list);
-		} catch(Exception e) {
-			logger.error("An Exception occurred ...", e);
-		}
-		return "";
 	}
 	
 	private static final String EXCEPTION = "An Exception occured ...";
@@ -227,6 +218,17 @@ public class SummaryDao{
 			logger.error(EXCEPTION, e);
 		}
 		return new ArrayList<>();
+	}
+	
+	//Makes a new string for the Entry to be written to the Print Writer
+	public String getAnEntry(SummaryObjectVO o) {
+		try {
+			var list = objectToList(o);
+			return unsplit(list);
+		} catch(Exception e) {
+			logger.error("An Exception occurred ...", e);
+		}
+		return "";
 	}
 	
 	private SummaryObjectVO updateObjectNullFields(SummaryObjectVO existing, SummaryObjectVO rs) {
