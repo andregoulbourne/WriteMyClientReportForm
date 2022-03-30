@@ -1,11 +1,12 @@
 package com.andre;
 
-import com.andre.dao.ReadCsv;
+import com.andre.dao.SummaryDao;
+import com.andre.model.SummaryObjectVO;
 import com.andre.service.WriteCommentService;
 
 public class Driver {
 	
-	static ReadCsv reader = new ReadCsv();
+	static SummaryDao reader = new SummaryDao();
 	
 	static WriteCommentService service = new WriteCommentService();
 
@@ -13,6 +14,11 @@ public class Driver {
 		System.out.println("Hello World");
 		
 		reader.setFileInPath("./src/main/resources/Summarys.csv");
+		
+		var o = new SummaryObjectVO();
+		o.setStudent("Mike");
+		
+		reader.updateCSVFile("1",o);
 		
 		var list = reader.readCSVFile();
 		
