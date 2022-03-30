@@ -17,8 +17,9 @@ public class Driver {
 		
 		var o = new SummaryObjectVO();
 		o.setStudent("Mike");
+		o.setId("1");
 		
-		reader.updateCSVFile("1",o);
+		reader.updateCSVFile(o);
 		
 		var list = reader.readCSVFile();
 		

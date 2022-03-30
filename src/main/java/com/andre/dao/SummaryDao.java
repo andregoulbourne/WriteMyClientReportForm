@@ -22,6 +22,8 @@ public class SummaryDao{
 		this.fileInPath = fileInPath;
 	}
 	
+	private static final String CURRENTLINE = "current Line Is ... %s";
+	
 	public List<SummaryObjectVO> readCSVFile() {
 		
 		try (var br = new BufferedReader( new FileReader(fileInPath))) {
@@ -31,7 +33,7 @@ public class SummaryDao{
 			var firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
+				logger.info(String.format(CURRENTLINE,sCurrentLine));
 				
 				var valuesList = split(sCurrentLine);
 				
@@ -44,10 +46,11 @@ public class SummaryDao{
 			}
 			return rs;
 		} catch(Exception e) {
-			logger.error("An Exception occured ...", e);
+			logger.error(EXCEPTION, e);
 		}
 		return new ArrayList<>();
 	}
+	
 	
 	public SummaryObjectVO readCSVFileSingleEntry(String id) {
 		
@@ -64,7 +67,7 @@ public class SummaryDao{
 				var object = listToObject(valuesList);
 				
 					if(object.getId().equals(id)) {
-						logger.info(String.format("current Line in readCSVFileSingleEntry Is ... %s",sCurrentLine));
+						logger.info(String.format(CURRENTLINE,sCurrentLine));
 						return object;
 					}
 				
@@ -88,19 +91,41 @@ public class SummaryDao{
 		return "";
 	}
 	
-	public int updateCSVFile(String id, SummaryObjectVO o) {
+	private static final String EXCEPTION = "An Exception occured ...";
+	
+	public int updateCSVFile(SummaryObjectVO o) {
 		try {
-			var rs = updateCSVFilePart1(id, o);
+			var rs = updateCSVFilePart1(o);
 			return updateCSVPart2(rs);
 		} catch(Exception e) {
-			logger.error("An unexpected exception occured ", e);
+			logger.error(EXCEPTION, e);
 			return 0;
 		}
 	}
 	
-	private List<SummaryObjectVO> updateCSVFilePart1(String id, SummaryObjectVO o) {
-		
-		if(id==null || o==null) return new ArrayList<>();
+	public int addCSVFileEntry(SummaryObjectVO o) {
+		try {
+			var rs = addCSVFileEntryPart1(o);
+			return updateCSVPart2(rs);
+		} catch(Exception e) {
+			logger.error(EXCEPTION, e);
+			return 0;
+		}
+	}
+	
+	public int deleteCSVFileEntry(SummaryObjectVO o) {
+		try {
+			var rs = deleteCSVFileEntryPart1(o);
+			return updateCSVPart2(rs);
+		} catch(Exception e) {
+			logger.error(EXCEPTION, e);
+			return 0;
+		}
+	}
+	
+	private List<SummaryObjectVO> updateCSVFilePart1(SummaryObjectVO o) {
+		var id = o.getId();
+		if(id==null) return new ArrayList<>();
 		
 		try (var br = new BufferedReader( new FileReader(fileInPath))) {
 			var rs = new ArrayList<SummaryObjectVO>();
@@ -116,7 +141,7 @@ public class SummaryDao{
 				var object = listToObject(valuesList);
 				
 					if(object.getId().equals(id)) {
-						logger.info(String.format("current Line in readCSVFileSingleEntry Is ... %s",sCurrentLine));
+						logger.info(String.format(CURRENTLINE,sCurrentLine));
 						var rsObject = updateObjectNullFields(object, o);
 						rs.add(rsObject);
 					} else {
@@ -133,6 +158,77 @@ public class SummaryDao{
 		return new ArrayList<>();
 	}
 	
+	private List<SummaryObjectVO> addCSVFileEntryPart1(SummaryObjectVO o) {
+		var id = o.getId();
+		if(id==null) return new ArrayList<>();
+		
+		try (var br = new BufferedReader( new FileReader(fileInPath))) {
+			var rs = new ArrayList<SummaryObjectVO>();
+			
+			String sCurrentLine="";
+			var firstRow = true;
+			while((sCurrentLine = br.readLine()) != null) {
+				if(!firstRow) {
+				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
+				
+				var valuesList = split(sCurrentLine);
+				
+				var object = listToObject(valuesList);
+				
+					if(object.getId().equals(id)) {
+						logger.info(String.format(CURRENTLINE,sCurrentLine));
+						logger.info("Object already exist ...");
+						return new ArrayList<>();
+					} else {
+						rs.add(object);
+					}
+				
+				} else firstRow = false;
+				
+			}
+			
+			rs.add(o);
+			return rs;
+		} catch(Exception e) {
+			logger.error(EXCEPTION, e);
+		}
+		return new ArrayList<>();
+	}
+	
+	private List<SummaryObjectVO> deleteCSVFileEntryPart1(SummaryObjectVO o) {
+		var id = o.getId();
+		if(id==null) return new ArrayList<>();
+		var entry=readCSVFileSingleEntry(id);
+		
+		if(entry.getId()==null) return new ArrayList<>();
+		
+		try (var br = new BufferedReader( new FileReader(fileInPath))) {
+			var rs = new ArrayList<SummaryObjectVO>();
+			
+			String sCurrentLine="";
+			var firstRow = true;
+			while((sCurrentLine = br.readLine()) != null) {
+				if(!firstRow) {
+				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
+				
+				var valuesList = split(sCurrentLine);
+				
+				var object = listToObject(valuesList);
+				
+					if(!object.getId().equals(id)) {
+						rs.add(object);
+					}
+				
+				} else firstRow = false;
+				
+			}
+			return rs;
+		} catch(Exception e) {
+			logger.error(EXCEPTION, e);
+		}
+		return new ArrayList<>();
+	}
+	
 	private SummaryObjectVO updateObjectNullFields(SummaryObjectVO existing, SummaryObjectVO rs) {
 		try {
 			if(rs.getId()==null) rs.setId(existing.getId());
@@ -144,7 +240,7 @@ public class SummaryDao{
 			logger.info("new object "+rs.toString());
 			return rs;
 		} catch(Exception e) {
-			logger.error("An unexpected exception occurred",e);
+			logger.error(EXCEPTION,e);
 			return new SummaryObjectVO();
 		}
 	}

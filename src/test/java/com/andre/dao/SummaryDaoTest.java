@@ -79,19 +79,48 @@ public class SummaryDaoTest {
 		
 		reader = new SummaryDao();
 		
-		assertDoesNotThrow(() -> reader.updateCSVFile(null,null));
-		assertEquals(0,reader.updateCSVFile(null,null));
+		assertDoesNotThrow(() -> reader.updateCSVFile(null));
+		assertEquals(0,reader.updateCSVFile(null));
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		assertEquals(0,reader.updateCSVFile(null,null));
+		assertEquals(0,reader.updateCSVFile(null));
 		
 		var o = new SummaryObjectVO();
 		o.setStudent("Mike");
+		o.setId("1");
 		
-		assertEquals(1,reader.updateCSVFile("1",o));
+		assertEquals(1,reader.updateCSVFile(o));
 		
 		
+	}
+	
+	@Test
+	public void testAddAndDeleteCSVFileEntry_returnsZeroOrOne() {
+		
+		reader = new SummaryDao();
+		
+		assertDoesNotThrow(() -> reader.addCSVFileEntry(null));
+		assertEquals(0,reader.addCSVFileEntry(null));
+		
+		reader.setFileInPath("./src/test/resources/Summarys.csv");
+		
+		assertEquals(0,reader.addCSVFileEntry(null));
+		
+		var o = new SummaryObjectVO();
+		o.setId("3");
+		o.setCoveredValue("agag");
+		o.setGender("he");
+		o.setMadeADifference(false);
+		o.setRecomendation("afhakf");
+		o.setStatus("2");
+		o.setStudent("Cool Kid");
+		
+		assertEquals(1,reader.addCSVFileEntry(o));
+		
+		assertDoesNotThrow(() ->reader.deleteCSVFileEntry(null));
+		assertEquals(1,reader.deleteCSVFileEntry(o));
+		assertEquals(0,reader.deleteCSVFileEntry(o));
 	}
 
 }
