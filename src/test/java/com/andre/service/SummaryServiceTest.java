@@ -2,7 +2,9 @@ package com.andre.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,8 +25,19 @@ public class SummaryServiceTest {
 	}
 	
 	@Test
+	public void tmp() {
+		try {
+			String currentPath = new java.io.File(".").getCanonicalPath();
+			System.out.println(currentPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertEquals(1, 1);
+	}
+	
+	@Test
 	public void testGetAllSummary(){
-		var rs = new ArrayList<SummaryVO>();
+		List<SummaryVO> rs = new ArrayList<>();
 		Mockito.when(dao.readCSVFile()).thenReturn(rs);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
@@ -35,7 +48,7 @@ public class SummaryServiceTest {
 	
 	@Test
 	public void testGetASummary() {
-		var rs = new SummaryVO();
+		SummaryVO rs = new SummaryVO();
 		Mockito.when(dao.readCSVFileSingleEntry(id)).thenReturn(rs);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		

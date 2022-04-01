@@ -16,28 +16,28 @@ public class SummaryVOTest {
 
 	@Test
 	public void testGetterAndSetters_setAnotherId() {
-		var expectedResult = "1";
+		String expectedResult = "1";
 		summaryObject.setId("1");
 		assertEquals(expectedResult, summaryObject.getId());
 	}
 
 	@Test
 	public void testGetterAndSetters_setAnotherStudent() {
-		var expectedResult = "Andre";
+		String expectedResult = "Andre";
 		summaryObject.setStudent("Andre");
 		assertEquals(expectedResult, summaryObject.getStudent());
 	}
 	
 	@Test
 	public void testGetterAndSetters_setAnotherStatus() {
-		var expectedResult = "1";
+		String expectedResult = "1";
 		summaryObject.setStatus("1");
 		assertEquals(expectedResult, summaryObject.getStatus());
 	}
 
 	@Test
 	public void testGetterAndSetters_setAnotherMadeADifference() {
-		var expectedResult = true;
+		boolean expectedResult = true;
 		summaryObject.setMadeADifference(true);
 		assertEquals(expectedResult, summaryObject.isMadeADifference());
 	}
@@ -45,21 +45,21 @@ public class SummaryVOTest {
 
 	@Test
 	public void testGetterAndSetters_setAnotherCoveredValue() {
-		var expectedResult = "coveredValue";
+		String expectedResult = "coveredValue";
 		summaryObject.setCoveredValue("coveredValue");
 		assertEquals(expectedResult, summaryObject.getCoveredValue());
 	}
 
 	@Test
 	public void testGetterAndSetters_setAnotherRecomendation() {
-		var expectedResult = "1";
+		String expectedResult = "1";
 		summaryObject.setRecomendation("1");
 		assertEquals(expectedResult, summaryObject.getRecomendation());
 	}
 	
 	@Test
 	public void testGetterAndSetters_setGender() {
-		var expectedResult = "1";
+		String expectedResult = "1";
 		summaryObject.setGender("1");
 		assertEquals(expectedResult, summaryObject.getGender());
 	}

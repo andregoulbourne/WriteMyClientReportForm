@@ -24,22 +24,32 @@ public class SummaryDao{
 		this.fileInPath = fileInPath;
 	}
 	
+	private String validationMsg;
+	
+	public String getValidationMsg() {
+		return validationMsg;
+	}
+	
+	public void setValidationMsg(String validationMsg) {
+		this.validationMsg = validationMsg;
+	}
+
 	private static final String CURRENTLINE = "current Line Is ... %s";
 	
 	public List<SummaryVO> readCSVFile() {
 		
-		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryVO>();
+		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
+			List<SummaryVO> rs = new ArrayList<>();
 			
 			String sCurrentLine="";
-			var firstRow = true;
+			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
 				logger.info(String.format(CURRENTLINE,sCurrentLine));
 				
-				var valuesList = split(sCurrentLine);
+				List<String> valuesList = split(sCurrentLine);
 				
-				var object = listToObject(valuesList);
+				SummaryVO object = listToObject(valuesList);
 				
 				rs.add(object);
 				
@@ -56,17 +66,15 @@ public class SummaryDao{
 	
 	public SummaryVO readCSVFileSingleEntry(String id) {
 		
-		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new SummaryVO();
-			
+		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
 			String sCurrentLine="";
-			var firstRow = true;
+			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
 				
-				var valuesList = split(sCurrentLine);
+				List<String> valuesList = split(sCurrentLine);
 				
-				var object = listToObject(valuesList);
+				SummaryVO object = listToObject(valuesList);
 				
 					if(object.getId().equals(id)) {
 						logger.info(String.format(CURRENTLINE,sCurrentLine));
@@ -86,7 +94,7 @@ public class SummaryDao{
 	
 	public int updateCSVFile(SummaryVO o) {
 		try {
-			var rs = updateCSVFilePart1(o);
+			List<SummaryVO> rs = updateCSVFilePart1(o);
 			return updateCSVPart2(rs);
 		} catch(Exception e) {
 			logger.error(EXCEPTION, e);
@@ -96,7 +104,7 @@ public class SummaryDao{
 	
 	public int addCSVFileEntry(SummaryVO o) {
 		try {
-			var rs = addCSVFileEntryPart1(o);
+			List<SummaryVO> rs = addCSVFileEntryPart1(o);
 			return updateCSVPart2(rs);
 		} catch(Exception e) {
 			logger.error(EXCEPTION, e);
@@ -106,7 +114,7 @@ public class SummaryDao{
 	
 	public int deleteCSVFileEntry(SummaryVO o) {
 		try {
-			var rs = deleteCSVFileEntryPart1(o);
+			List<SummaryVO> rs = deleteCSVFileEntryPart1(o);
 			return updateCSVPart2(rs);
 		} catch(Exception e) {
 			logger.error(EXCEPTION, e);
@@ -115,25 +123,25 @@ public class SummaryDao{
 	}
 	
 	private List<SummaryVO> updateCSVFilePart1(SummaryVO o) {
-		var id = o.getId();
+		String id = o.getId();
 		if(id==null) return new ArrayList<>();
 		
-		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryVO>();
+		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
+			List<SummaryVO> rs = new ArrayList<>();
 			
 			String sCurrentLine="";
-			var firstRow = true;
+			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
 				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
 				
-				var valuesList = split(sCurrentLine);
+				List<String> valuesList = split(sCurrentLine);
 				
-				var object = listToObject(valuesList);
+				SummaryVO object = listToObject(valuesList);
 				
 					if(object.getId().equals(id)) {
 						logger.info(String.format(CURRENTLINE,sCurrentLine));
-						var rsObject = updateObjectNullFields(object, o);
+						SummaryVO rsObject = updateObjectNullFields(object, o);
 						rs.add(rsObject);
 					} else {
 						rs.add(object);
@@ -144,31 +152,32 @@ public class SummaryDao{
 			}
 			return rs;
 		} catch(Exception e) {
-			logger.error("An Exception occured ...", e);
+			logger.error(EXCEPTION, e);
 		}
 		return new ArrayList<>();
 	}
 	
 	private List<SummaryVO> addCSVFileEntryPart1(SummaryVO o) {
-		var id = o.getId();
+		String id = o.getId();
 		if(id==null) return new ArrayList<>();
 		
-		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryVO>();
+		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
+			List<SummaryVO> rs = new ArrayList<>();
 			
 			String sCurrentLine="";
-			var firstRow = true;
+			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
 				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
 				
-				var valuesList = split(sCurrentLine);
+				List<String> valuesList = split(sCurrentLine);
 				
-				var object = listToObject(valuesList);
+				SummaryVO object = listToObject(valuesList);
 				
 					if(object.getId().equals(id)) {
 						logger.info(String.format(CURRENTLINE,sCurrentLine));
-						logger.info("Object already exist ...");
+						validationMsg = "Summary already exist ...";
+						logger.info(validationMsg);
 						return new ArrayList<>();
 					} else {
 						rs.add(object);
@@ -187,24 +196,24 @@ public class SummaryDao{
 	}
 	
 	private List<SummaryVO> deleteCSVFileEntryPart1(SummaryVO o) {
-		var id = o.getId();
+		String id = o.getId();
 		if(id==null) return new ArrayList<>();
-		var entry=readCSVFileSingleEntry(id);
+		SummaryVO entry=readCSVFileSingleEntry(id);
 		
 		if(entry.getId()==null) return new ArrayList<>();
 		
-		try (var br = new BufferedReader( new FileReader(fileInPath))) {
-			var rs = new ArrayList<SummaryVO>();
+		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
+			List<SummaryVO> rs = new ArrayList<>();
 			
 			String sCurrentLine="";
-			var firstRow = true;
+			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
 				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
 				
-				var valuesList = split(sCurrentLine);
+				List<String> valuesList = split(sCurrentLine);
 				
-				var object = listToObject(valuesList);
+				SummaryVO object = listToObject(valuesList);
 				
 					if(!object.getId().equals(id)) {
 						rs.add(object);
@@ -223,7 +232,7 @@ public class SummaryDao{
 	//Makes a new string for the Entry to be written to the Print Writer
 	public String getAnEntry(SummaryVO o) {
 		try {
-			var list = objectToList(o);
+			List<String> list = objectToList(o);
 			return unsplit(list);
 		} catch(Exception e) {
 			logger.error("An Exception occurred ...", e);
@@ -250,7 +259,7 @@ public class SummaryDao{
 	private static final String HEADER = "ID,STUDENT_NAME,STATUS,MADE_A_DIFFERENCE,COVERED_VALUE,RECOMMENDATION,GENDER";
 	
 	private int updateCSVPart2(List<SummaryVO> list) {
-		var rs = new ArrayList<String>();
+		List<String> rs = new ArrayList<>();
 		
 		if(list.isEmpty() || fileInPath==null) {
 			logger.error("dependency missing");
@@ -258,11 +267,11 @@ public class SummaryDao{
 		}
 		
 		for(SummaryVO o: list) {
-			var entryString=getAnEntry(o);
+			String entryString=getAnEntry(o);
 			if(!entryString.isEmpty()) rs.add(entryString);
 		}
 		
-		try(var writer = new PrintWriter(fileInPath,"UTF-8")) {
+		try(PrintWriter writer = new PrintWriter(fileInPath,"UTF-8")) {
 			writer.println(HEADER);
 			for(String s: rs) {
 				writer.println(s);
@@ -276,10 +285,10 @@ public class SummaryDao{
 	}
 	
 	private List<String> split(String in){
-		var storedResult = new StringBuilder();
-		var valuesList = new ArrayList<String>();
-		var regular = true;
-		for(var i=0; i<in.length(); i++) {
+		StringBuilder storedResult = new StringBuilder();
+		List<String> valuesList = new ArrayList<String>();
+		boolean regular = true;
+		for(int i=0; i<in.length(); i++) {
 			if((in.charAt(i)!=',' && in.charAt(i)!='\"' && regular) || 
 			(in.charAt(i)!='\"' && !regular))  storedResult.append(in.charAt(i));
 			if(in.charAt(i)=='\"') regular = !regular;
@@ -293,7 +302,7 @@ public class SummaryDao{
 	}
 	
 	private String unsplit(List<String> in) {
-		var rs = new StringBuilder();
+		StringBuilder rs = new StringBuilder();
 		for(String s: in) {
 			rs.append("\""+s+"\",");
 		}
@@ -305,8 +314,8 @@ public class SummaryDao{
 	
 	private SummaryVO listToObject(List<String> list) {
 		summaryObject = new SummaryVO();
-		for(var i=0; i<list.size(); i++) {
-			var a = i+1;
+		for(int i=0; i<list.size(); i++) {
+			int a = i+1;
 			if(a==1) {
 				summaryObject.setId(list.get(i));
 			}else if(a==2) {
@@ -328,7 +337,7 @@ public class SummaryDao{
 	}
 	
 	private List<String> objectToList(SummaryVO o){
-		var rs = new ArrayList<String>();
+		List<String> rs = new ArrayList<String>();
 		rs.add(o.getId());
 		rs.add(o.getStudent());
 		rs.add(o.getStatus());

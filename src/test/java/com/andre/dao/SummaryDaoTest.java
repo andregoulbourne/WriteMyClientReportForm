@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -22,8 +23,8 @@ public class SummaryDaoTest {
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		var expected = new ArrayList<SummaryVO>();
-		var object = new SummaryVO();
+		List<SummaryVO> expected = new ArrayList<>();
+		SummaryVO object = new SummaryVO();
 		object.setId("1");
 		object.setStudent("Mike");
 		object.setStatus("1");
@@ -33,7 +34,7 @@ public class SummaryDaoTest {
 		object.setGender("M");
 		expected.add(object);
 		
-		var object1 = new SummaryVO();
+		SummaryVO object1 = new SummaryVO();
 		object1.setId("2");
 		object1.setStudent("Saddy");
 		object1.setStatus("0");
@@ -45,7 +46,7 @@ public class SummaryDaoTest {
 		
 		
 		System.out.println(expected);
-		var actual = reader.readCSVFile();
+		List<SummaryVO> actual = reader.readCSVFile();
 		assertEquals(expected.size(), actual.size());
 		assertEquals("definition of derivatives using limits and implicit differentiation", actual.get(0).getCoveredValue());
 	}
@@ -59,7 +60,7 @@ public class SummaryDaoTest {
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		var object = new SummaryVO();
+		SummaryVO object = new SummaryVO();
 		object.setId("1");
 		object.setStudent("Mike");
 		object.setStatus("1");
@@ -69,7 +70,7 @@ public class SummaryDaoTest {
 		object.setGender("M");
 		
 		
-		var actual = reader.readCSVFileSingleEntry("1");
+		SummaryVO actual = reader.readCSVFileSingleEntry("1");
 		assertEquals(object.getId(), actual.getId());
 		assertEquals(object.getStudent(), actual.getStudent());
 	}
@@ -86,7 +87,7 @@ public class SummaryDaoTest {
 		
 		assertEquals(0,reader.updateCSVFile(null));
 		
-		var o = new SummaryVO();
+		SummaryVO o = new SummaryVO();
 		o.setStudent("Mike");
 		o.setId("1");
 		
@@ -107,7 +108,7 @@ public class SummaryDaoTest {
 		
 		assertEquals(0,reader.addCSVFileEntry(null));
 		
-		var o = new SummaryVO();
+		SummaryVO o = new SummaryVO();
 		o.setId("3");
 		o.setCoveredValue("agag");
 		o.setGender("he");
