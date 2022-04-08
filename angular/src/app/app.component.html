@@ -1,0 +1,17 @@
+<button (click)="getSelectedRows()">Generate Comments</button>
+
+<ag-grid-angular
+  #agGrid
+  style="width: 1500px; height: 150px;"
+  class="ag-theme-balham"
+  [rowData]="rowData"
+  [columnDefs]="colDef"
+  (cellValueChanged)="onCellValueChanged($event)"
+>
+</ag-grid-angular>
+<!--rowSelection="multiple"
+enable mutliple selections
+-->
+
+
+<p>{{tutorComment}}</p>
