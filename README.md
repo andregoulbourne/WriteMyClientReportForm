@@ -1,5 +1,19 @@
 # WriteMyClientReportForm
-An application with spring boot back end and angular front end to write client report comments.
+An application with spring boot back end and angular front end to write client report comments.   
+No data base reading and changing a csv file for the data.
+
+# Technologies Used
+* Java
+* Spring Framework
+* Maven
+* CSV
+* TypeScript
+* Angular
+* CSS
+
+# Features
+* Editable grid using ag-grid
+* Dynamically rendering comment on selection of a row and hit of the button
 
 ## Running the app
 
@@ -13,4 +27,8 @@ An application with spring boot back end and angular front end to write client r
 * ng build  
 * Copy everything in angular/dist/WriteClientReport Into the the src/main/webapp folder  
 * mvn spring-boot:run  
+
+![image](https://user-images.githubusercontent.com/84467369/162369704-84d13d40-b77a-41b2-b2e8-10d749ab1dd9.png)
+![image](https://user-images.githubusercontent.com/84467369/162369748-33f43336-ef7f-4b6e-b63f-153bd684bf6d.png)
+
 
