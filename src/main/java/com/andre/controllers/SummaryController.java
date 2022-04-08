@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ public class SummaryController {
 	private static final String ERROR = "ERROR";
 	
 	
-	private static final String SUMMARYS ="summarys";
+	private static final String DATA ="data";
 	
 	private static final String MSG = "msg";
 	
@@ -49,10 +50,10 @@ public class SummaryController {
 		respMap = new HashMap<>();
 		
 		try {
-			respMap.put(SUMMARYS,summaryService.getAllSummary());
+			respMap.put(DATA,summaryService.getAllSummary());
 			respMap.put(MSG, SUCCESS);
 		} catch (Exception e) {
-			respMap.put(SUMMARYS,new ArrayList<>());
+			respMap.put(DATA,new ArrayList<>());
 			setErrorMsg();
 			logger.error(e);
 		}
@@ -62,6 +63,30 @@ public class SummaryController {
 	}
 	
 	private static final String STATUS= "status";
+	
+	@PostMapping("/updateSummary.do")
+	public @ResponseBody Map<String, Object> updateASummary(@RequestBody SummaryVO summary){
+		respMap = new HashMap<>();
+		
+		int status = 0;
+		
+		try {
+			status = summaryService.updateSummary(summary);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		
+		respMap.put(STATUS,status);
+		
+		if(status == 1) {
+			respMap.put(MSG, SUCCESS);
+		} else {
+			setErrorMsg();
+		}
+		
+		return respMap;
+		
+	}
 	
 	@PostMapping
 	public @ResponseBody Map<String, Object> addASummary(@RequestBody SummaryVO summary){
@@ -121,19 +146,16 @@ public class SummaryController {
 		
 	}
 	
-	@GetMapping("/writeAComment.do")
-	public @ResponseBody Map<String, Object> writeAComment(@RequestParam("id") String id){
+	@PostMapping("/writeAComment.do")
+	public @ResponseBody Map<String, Object> writeAComment(@RequestBody List<SummaryVO> summarys){
 		respMap = new HashMap<>();
 		
 		try {
-			SummaryVO summary = summaryService.getASummary(id);
-			List<SummaryVO> list = new ArrayList<>();
-			list.add(summary);
-			respMap.put(SUMMARYS,list);
-			respMap.put("comment", writeCommentService.writeComment(list));
+			respMap.put(DATA,summarys);
+			respMap.put("comment", writeCommentService.writeComment(summarys));
 			respMap.put(MSG, SUCCESS);
 		} catch (Exception e) {
-			respMap.put(SUMMARYS,new ArrayList<>());
+			respMap.put(DATA,new ArrayList<>());
 			setErrorMsg();
 			respMap.put("comment", "");
 			logger.error(e);
