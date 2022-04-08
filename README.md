@@ -1,6 +1,6 @@
 # WriteMyClientReportForm
-An application with spring boot back end and angular front end to write client report comments.   
-No data base reading and changing a csv file for the data.
+A application with spring boot back end and angular front end to write client report comments.   
+No data base reading and changing a csv file for the data. Containerized using docker.
 
 # Technologies Used
 * Java
@@ -10,6 +10,7 @@ No data base reading and changing a csv file for the data.
 * TypeScript
 * Angular
 * CSS
+* Docker
 
 # Features
 * Editable grid using ag-grid
