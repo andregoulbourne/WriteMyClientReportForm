@@ -17,7 +17,7 @@ class SummaryVOTest {
 	}
 
 	@Test
-	public void testGetterAndSetters_setAnotherId() {
+	void testGetterAndSetters_setAnotherId() {
 		String expectedResult = "1";
 		summaryObject.setId("1");
 		assertEquals(expectedResult, summaryObject.getId());
