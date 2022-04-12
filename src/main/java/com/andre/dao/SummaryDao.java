@@ -133,7 +133,7 @@ public class SummaryDao{
 			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
+				logger.info(String.format(CURRENTLINE,sCurrentLine));
 				
 				List<String> valuesList = split(sCurrentLine);
 				
@@ -168,7 +168,7 @@ public class SummaryDao{
 			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
+				logger.info(String.format(CURRENTLINE,sCurrentLine));
 				
 				List<String> valuesList = split(sCurrentLine);
 				
@@ -209,7 +209,7 @@ public class SummaryDao{
 			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format("current Line in readCSVFile Is ... %s",sCurrentLine));
+				logger.info(String.format(CURRENTLINE,sCurrentLine));
 				
 				List<String> valuesList = split(sCurrentLine);
 				
@@ -235,7 +235,7 @@ public class SummaryDao{
 			List<String> list = objectToList(o);
 			return unsplit(list);
 		} catch(Exception e) {
-			logger.error("An Exception occurred ...", e);
+			logger.error(EXCEPTION, e);
 		}
 		return "";
 	}
@@ -286,7 +286,7 @@ public class SummaryDao{
 	
 	private List<String> split(String in){
 		StringBuilder storedResult = new StringBuilder();
-		List<String> valuesList = new ArrayList<String>();
+		List<String> valuesList = new ArrayList<>();
 		boolean regular = true;
 		for(int i=0; i<in.length(); i++) {
 			if((in.charAt(i)!=',' && in.charAt(i)!='\"' && regular) || 
@@ -323,13 +323,13 @@ public class SummaryDao{
 			} else if(a==3) {
 				summaryObject.setStatus(list.get(i));
 			} else if(a==4) {
-				setMadeDifference(list.get(i),a);
+				setMadeDifference(list.get(i));
 			} else if(a==5) {
 				summaryObject.setCoveredValue(list.get(i));
 			} else if(a==6) {
 				summaryObject.setRecomendation(list.get(i));
 			} else if(a==7) {
-				setGender(list.get(i),a);
+				setGender(list.get(i));
 			}
 		}
 		logger.info("List to object is ... ");
@@ -337,7 +337,7 @@ public class SummaryDao{
 	}
 	
 	private List<String> objectToList(SummaryVO o){
-		List<String> rs = new ArrayList<String>();
+		List<String> rs = new ArrayList<>();
 		rs.add(o.getId());
 		rs.add(o.getStudent());
 		rs.add(o.getStatus());
@@ -351,12 +351,12 @@ public class SummaryDao{
 		return rs;
 	}
 	
-	private void setMadeDifference(String in, int a) {
+	private void setMadeDifference(String in) {
 		if(in.equals("1")) summaryObject.setMadeADifference(true);
 		if(in.equals("0")) summaryObject.setMadeADifference(false);
 	}
 
-	private void setGender(String in, int a) {
+	private void setGender(String in) {
 		if(in.equalsIgnoreCase("M")) summaryObject.setGender("he");
 		if(in.equalsIgnoreCase("F")) summaryObject.setGender("she");
 	}

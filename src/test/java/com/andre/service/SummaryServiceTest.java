@@ -23,16 +23,16 @@ class SummaryServiceTest {
 		dao = Mockito.mock(SummaryDao.class);
 	}
 	
-	@Test
-	void tmp() {
-		try {
-			String currentPath = new java.io.File(".").getCanonicalPath();
-			System.out.println(currentPath);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		assertEquals(1, 1);
-	}
+//	@Test
+//	void tmp() {
+//		try {
+//			String currentPath = new java.io.File(".").getCanonicalPath();
+//			System.out.println(currentPath);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		assertEquals(1, 1);
+//	}
 	
 	@Test
 	void testGetAllSummary(){
