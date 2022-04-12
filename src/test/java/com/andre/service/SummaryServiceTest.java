@@ -2,30 +2,29 @@ package com.andre.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.andre.dao.SummaryDao;
 import com.andre.model.SummaryVO;
 
-public class SummaryServiceTest {
+class SummaryServiceTest {
 	
 	private SummaryService service = new SummaryService();
 	private SummaryDao dao;
 	
-	@Before
-	public void setup() {
+	@BeforeEach
+	void setup() {
 		dao = Mockito.mock(SummaryDao.class);
 	}
 	
 	@Test
-	public void tmp() {
+	void tmp() {
 		try {
 			String currentPath = new java.io.File(".").getCanonicalPath();
 			System.out.println(currentPath);
@@ -36,7 +35,7 @@ public class SummaryServiceTest {
 	}
 	
 	@Test
-	public void testGetAllSummary(){
+	void testGetAllSummary(){
 		List<SummaryVO> rs = new ArrayList<>();
 		Mockito.when(dao.readCSVFile()).thenReturn(rs);
 		ReflectionTestUtils.setField(service,"dao", dao); 
@@ -47,7 +46,7 @@ public class SummaryServiceTest {
 	private static final String id = "1";
 	
 	@Test
-	public void testGetASummary() {
+	void testGetASummary() {
 		SummaryVO rs = new SummaryVO();
 		Mockito.when(dao.readCSVFileSingleEntry(id)).thenReturn(rs);
 		ReflectionTestUtils.setField(service,"dao", dao); 
@@ -58,7 +57,7 @@ public class SummaryServiceTest {
 	private static final SummaryVO o = new SummaryVO();
 	
 	@Test
-	public void testUpdateSummary() {
+	void testUpdateSummary() {
 		Mockito.when(dao.updateCSVFile(o)).thenReturn(1);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
@@ -66,7 +65,7 @@ public class SummaryServiceTest {
 	}
 	
 	@Test
-	public void testAddSummary() {
+	void testAddSummary() {
 		Mockito.when(dao.addCSVFileEntry(o)).thenReturn(1);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
@@ -74,7 +73,7 @@ public class SummaryServiceTest {
 	}
 	
 	@Test
-	public void testDeleteSummary() {
+	void testDeleteSummary() {
 		Mockito.when(dao.deleteCSVFileEntry(o)).thenReturn(1);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		

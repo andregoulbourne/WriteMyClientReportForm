@@ -6,16 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.andre.model.SummaryVO;
 
-public class SummaryDaoTest {
+class SummaryDaoTest {
 	
 	private SummaryDao reader;
 	
 	@Test
-	public void testSummaryDaoFile_returnsListSummaryObjects() {
+	void testSummaryDaoFile_returnsListSummaryObjects() {
 		
 		reader = new SummaryDao();
 		
@@ -52,7 +52,7 @@ public class SummaryDaoTest {
 	}
 	
 	@Test
-	public void testReadCSVFileSingleEntry_returnsSummaryObjects() {
+	void testReadCSVFileSingleEntry_returnsSummaryObjects() {
 		
 		reader = new SummaryDao();
 		
@@ -76,7 +76,7 @@ public class SummaryDaoTest {
 	}
 	
 	@Test
-	public void testUpdateCSVFile_returnsZeroOrOne() {
+	void testUpdateCSVFile_returnsZeroOrOne() {
 		
 		reader = new SummaryDao();
 		
@@ -97,7 +97,7 @@ public class SummaryDaoTest {
 	}
 	
 	@Test
-	public void testAddAndDeleteCSVFileEntry_returnsZeroOrOne() {
+	void testAddAndDeleteCSVFileEntry_returnsZeroOrOne() {
 		
 		reader = new SummaryDao();
 		

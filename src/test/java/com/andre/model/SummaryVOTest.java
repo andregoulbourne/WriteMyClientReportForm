@@ -2,15 +2,17 @@ package com.andre.model;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class SummaryVOTest {
+
+
+class SummaryVOTest {
 
 	private SummaryVO summaryObject;
 
-	@Before
-	public void setup() {
+	@BeforeEach
+	void setup() {
 		this.summaryObject = new SummaryVO();
 	}
 
@@ -22,21 +24,21 @@ public class SummaryVOTest {
 	}
 
 	@Test
-	public void testGetterAndSetters_setAnotherStudent() {
+	void testGetterAndSetters_setAnotherStudent() {
 		String expectedResult = "Andre";
 		summaryObject.setStudent("Andre");
 		assertEquals(expectedResult, summaryObject.getStudent());
 	}
 	
 	@Test
-	public void testGetterAndSetters_setAnotherStatus() {
+	void testGetterAndSetters_setAnotherStatus() {
 		String expectedResult = "1";
 		summaryObject.setStatus("1");
 		assertEquals(expectedResult, summaryObject.getStatus());
 	}
 
 	@Test
-	public void testGetterAndSetters_setAnotherMadeADifference() {
+	void testGetterAndSetters_setAnotherMadeADifference() {
 		boolean expectedResult = true;
 		summaryObject.setMadeADifference(true);
 		assertEquals(expectedResult, summaryObject.isMadeADifference());
@@ -44,21 +46,21 @@ public class SummaryVOTest {
 
 
 	@Test
-	public void testGetterAndSetters_setAnotherCoveredValue() {
+	void testGetterAndSetters_setAnotherCoveredValue() {
 		String expectedResult = "coveredValue";
 		summaryObject.setCoveredValue("coveredValue");
 		assertEquals(expectedResult, summaryObject.getCoveredValue());
 	}
 
 	@Test
-	public void testGetterAndSetters_setAnotherRecomendation() {
+	void testGetterAndSetters_setAnotherRecomendation() {
 		String expectedResult = "1";
 		summaryObject.setRecomendation("1");
 		assertEquals(expectedResult, summaryObject.getRecomendation());
 	}
 	
 	@Test
-	public void testGetterAndSetters_setGender() {
+	void testGetterAndSetters_setGender() {
 		String expectedResult = "1";
 		summaryObject.setGender("1");
 		assertEquals(expectedResult, summaryObject.getGender());

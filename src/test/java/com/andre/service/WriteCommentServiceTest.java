@@ -5,14 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.andre.model.SummaryVO;
 
-public class WriteCommentServiceTest {
+class WriteCommentServiceTest {
 	
 	@Test
-	public void testWriteComment_returnTutorCommnentString() {
+	void testWriteComment_returnTutorCommnentString() {
 		WriteCommentService service = new WriteCommentService();
 		String expected = "On a scale from 1-3, Andre confidence level with the material was at a 3 at the beginning of the session.\r\n"
 				+ "\r\n"
