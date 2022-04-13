@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.andre.model.SummaryVO;
@@ -14,10 +15,13 @@ class SummaryDaoTest {
 	
 	private SummaryDao reader;
 	
+	@BeforeEach
+	void setup() {
+		reader = new SummaryDao();
+	}
+	
 	@Test
 	void testSummaryDaoFile_returnsListSummaryObjects() {
-		
-		reader = new SummaryDao();
 		
 		assertDoesNotThrow(() -> reader.readCSVFile());
 		
@@ -54,8 +58,6 @@ class SummaryDaoTest {
 	@Test
 	void testReadCSVFileSingleEntry_returnsSummaryObjects() {
 		
-		reader = new SummaryDao();
-		
 		assertDoesNotThrow(() -> reader.readCSVFileSingleEntry("1"));
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
@@ -78,8 +80,6 @@ class SummaryDaoTest {
 	@Test
 	void testUpdateCSVFile_returnsZeroOrOne() {
 		
-		reader = new SummaryDao();
-		
 		assertDoesNotThrow(() -> reader.updateCSVFile(null));
 		assertEquals(0,reader.updateCSVFile(null));
 		
@@ -98,8 +98,6 @@ class SummaryDaoTest {
 	
 	@Test
 	void testAddAndDeleteCSVFileEntry_returnsZeroOrOne() {
-		
-		reader = new SummaryDao();
 		
 		assertDoesNotThrow(() -> reader.addCSVFileEntry(null));
 		assertEquals(0,reader.addCSVFileEntry(null));
@@ -124,4 +122,11 @@ class SummaryDaoTest {
 		assertEquals(0,reader.deleteCSVFileEntry(o));
 	}
 
+	
+	@Test
+	void testValidationMsg() {
+		String validationMsg = "Some validation message";
+		reader.setValidationMsg(validationMsg);
+		assertEquals(validationMsg,reader.getValidationMsg());
+	}
 }
