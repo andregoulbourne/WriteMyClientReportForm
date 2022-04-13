@@ -27,7 +27,7 @@ class SummaryDaoTest {
 	@Test
 	void testSummaryDaoFile_returnsListSummaryObjects() {
 		
-		assertDoesNotThrow(() -> reader.readCSVFile());
+		assertDoesNotThrow(() -> reader.readCSVFile(null, Constants.ALL));
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
@@ -37,7 +37,7 @@ class SummaryDaoTest {
 		
 		
 		System.out.println(expected);
-		List<SummaryVO> actual = reader.readCSVFile();
+		List<SummaryVO> actual = reader.readCSVFile(null, Constants.ALL);
 		assertEquals(expected.size(), actual.size());
 		assertEquals("definition of derivatives using limits and implicit differentiation", actual.get(0).getCoveredValue());
 	}

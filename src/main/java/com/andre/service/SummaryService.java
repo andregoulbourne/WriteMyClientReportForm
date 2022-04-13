@@ -30,7 +30,7 @@ public class SummaryService {
 	
 	public List<SummaryVO> getAllSummary(){
 		setDataPath();
-		return dao.readCSVFile();
+		return dao.readCSVFile(null, Constants.ALL);
 	}
 	
 	public SummaryVO getASummary(String id) {

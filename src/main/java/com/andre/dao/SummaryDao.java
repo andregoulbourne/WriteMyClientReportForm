@@ -37,7 +37,7 @@ public class SummaryDao{
 
 	private static final String CURRENTLINE = "current Line Is ... %s";
 	
-	public List<SummaryVO> readCSVFile() {
+	public List<SummaryVO> readCSVFile(String id, String type) {
 		
 		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
 			List<SummaryVO> rs = new ArrayList<>();
@@ -52,7 +52,12 @@ public class SummaryDao{
 				
 				SummaryVO object = listToObject(valuesList);
 				
-				rs.add(object);
+					if(type.equals(Constants.ALL))
+						rs.add(object);
+					else if(type.equals(Constants.SINGLE) && object.getId().equals(id)) {
+						rs.add(object);
+						return rs;
+					}
 				
 				} else firstRow = false;
 				
@@ -60,31 +65,15 @@ public class SummaryDao{
 			return rs;
 		} catch(Exception e) {
 			logger.error(Constants.EXCEPTION, e);
+			if(id==null) logger.error("id is null");
 		}
 		return new ArrayList<>();
 	}
 	
 	
 	public SummaryVO readCSVFileSingleEntry(String id) {
-		
-		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
-			String sCurrentLine="";
-			boolean firstRow = true;
-			while((sCurrentLine = br.readLine()) != null) {
-				if(!firstRow) {
-				
-				List<String> valuesList = split(sCurrentLine);
-				
-				SummaryVO object = listToObject(valuesList);
-				
-					if(object.getId().equals(id)) {
-						logger.info(String.format(CURRENTLINE,sCurrentLine));
-						return object;
-					}
-				
-				} else firstRow = false;
-				
-			}
+		try {
+			return readCSVFile(id, Constants.SINGLE).get(0);
 		} catch(Exception e) {
 			logger.error(Constants.EXCEPTION, e);
 		}
@@ -100,7 +89,7 @@ public class SummaryDao{
 			 rs = updateCSVFilePart1(o, Constants.ADD);
 		if(type.equals(Constants.DELETE)) {
 			 rs = updateCSVFilePart1(o, Constants.DELETE);
-			 if(readCSVFile().size() == rs.size()) return 0;
+			 if(readCSVFile(null,Constants.ALL).size() == rs.size()) return 0;
 		}
 		if(rs==null || rs.isEmpty()) return 0;
 		return updateCSVPart2(rs);

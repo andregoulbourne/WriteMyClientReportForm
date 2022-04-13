@@ -1,6 +1,7 @@
 package com.andre.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ class SummaryServiceTest {
 	@Test
 	void testGetAllSummary(){
 		List<SummaryVO> rs = new ArrayList<>();
-		Mockito.when(dao.readCSVFile()).thenReturn(rs);
+		Mockito.when(dao.readCSVFile(null, Constants.ALL)).thenReturn(rs);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(rs,service.getAllSummary());
@@ -59,7 +60,12 @@ class SummaryServiceTest {
 	
 	@Test
 	void testUpdateSummary() {
-		Mockito.when(dao.csvFileEntry(o, Constants.DELETE)).thenReturn(1);
+		
+		ReflectionTestUtils.setField(service,"dao", dao);
+		
+		assertEquals(0,service.updateSummary(o));
+		
+		Mockito.when(dao.csvFileEntry(o, Constants.UPDATE)).thenReturn(1);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.updateSummary(o));

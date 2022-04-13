@@ -2,6 +2,10 @@ package com.andre.constants;
 
 public class Constants {
 	
+	private Constants() {
+	    throw new IllegalStateException("Utility class");
+	  }
+	
 	public static final String ALL = "all";
 	
 	public static final String SINGLE = "single";
