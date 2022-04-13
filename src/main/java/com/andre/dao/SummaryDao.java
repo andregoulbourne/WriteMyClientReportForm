@@ -140,7 +140,7 @@ public class SummaryDao{
 			return rs;
 		} catch(Exception e) {
 			logger.error(Constants.EXCEPTION, e);
-			if(fileInPath==null || fileInPath.isBlank()) 
+			if(fileInPath==null) 
 				logger.error("dependency missing");
 		}
 		return new ArrayList<>();
