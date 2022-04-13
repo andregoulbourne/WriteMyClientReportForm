@@ -48,14 +48,8 @@ public class SummaryController {
 	public @ResponseBody Map<String, Object> getAllSummarys(){
 		respMap = new HashMap<>();
 		
-		try {
-			respMap.put(DATA,summaryService.getAllSummary());
-			respMap.put(MSG, SUCCESS);
-		} catch (Exception e) {
-			respMap.put(DATA,new ArrayList<>());
-			setErrorMsg();
-			logger.error(e);
-		}
+		respMap.put(DATA,summaryService.getAllSummary());
+		respMap.put(MSG, SUCCESS);
 		
 		return respMap;
 		
@@ -67,13 +61,7 @@ public class SummaryController {
 	public @ResponseBody Map<String, Object> updateASummary(@RequestBody SummaryVO summary){
 		respMap = new HashMap<>();
 		
-		int status = 0;
-		
-		try {
-			status = summaryService.updateSummary(summary);
-		} catch (Exception e) {
-			logger.error(e);
-		}
+		int status = summaryService.updateSummary(summary);
 		
 		respMap.put(STATUS,status);
 		
@@ -91,13 +79,7 @@ public class SummaryController {
 	public @ResponseBody Map<String, Object> addASummary(@RequestBody SummaryVO summary){
 		respMap = new HashMap<>();
 		
-		int status = 0;
-		
-		try {
-			status = summaryService.addSummary(summary);
-		} catch (Exception e) {
-			logger.error(e);
-		}
+		int status = summaryService.addSummary(summary);
 		
 		respMap.put(STATUS,status);
 		
@@ -127,11 +109,7 @@ public class SummaryController {
 		
 		int status = 0;
 		
-		try {
-			status = summaryService.deleteSummary(summary);
-		} catch (Exception e) {
-			logger.error(e);
-		}
+		status = summaryService.deleteSummary(summary);
 		
 		respMap.put(STATUS,status);
 		
@@ -149,16 +127,9 @@ public class SummaryController {
 	public @ResponseBody Map<String, Object> writeAComment(@RequestBody List<SummaryVO> summarys){
 		respMap = new HashMap<>();
 		
-		try {
-			respMap.put(DATA,summarys);
-			respMap.put("comment", writeCommentService.writeComment(summarys));
-			respMap.put(MSG, SUCCESS);
-		} catch (Exception e) {
-			respMap.put(DATA,new ArrayList<>());
-			setErrorMsg();
-			respMap.put("comment", "");
-			logger.error(e);
-		}
+		respMap.put(DATA,summarys);
+		respMap.put("comment", writeCommentService.writeComment(summarys));
+		respMap.put(MSG, SUCCESS);
 		
 		return respMap;
 		
