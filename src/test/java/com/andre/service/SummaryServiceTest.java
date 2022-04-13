@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.andre.constants.Constants;
 import com.andre.dao.SummaryDao;
 import com.andre.model.SummaryVO;
 
@@ -58,7 +59,7 @@ class SummaryServiceTest {
 	
 	@Test
 	void testUpdateSummary() {
-		Mockito.when(dao.updateCSVFile(o)).thenReturn(1);
+		Mockito.when(dao.csvFileEntry(o, Constants.DELETE)).thenReturn(1);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.updateSummary(o));
@@ -66,7 +67,7 @@ class SummaryServiceTest {
 	
 	@Test
 	void testAddSummary() {
-		Mockito.when(dao.addCSVFileEntry(o)).thenReturn(1);
+		Mockito.when(dao.csvFileEntry(o, Constants.ADD)).thenReturn(1);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.addSummary(o));
@@ -74,7 +75,7 @@ class SummaryServiceTest {
 	
 	@Test
 	void testDeleteSummary() {
-		Mockito.when(dao.deleteCSVFileEntry(o)).thenReturn(1);
+		Mockito.when(dao.csvFileEntry(o, Constants.DELETE)).thenReturn(1);
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.deleteSummary(o));

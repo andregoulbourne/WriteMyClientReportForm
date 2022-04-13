@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.andre.constants.Constants;
 import com.andre.model.SummaryVO;
 
 @Repository
@@ -58,7 +59,7 @@ public class SummaryDao{
 			}
 			return rs;
 		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 		return new ArrayList<>();
 	}
@@ -85,41 +86,22 @@ public class SummaryDao{
 				
 			}
 		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 		return new SummaryVO();
 	}
 	
-	private static final String EXCEPTION = "An Exception occured ...";
-	
-	public int updateCSVFile(SummaryVO o) {
-		try {
-			List<SummaryVO> rs = updateCSVFilePart1(o);
-			return updateCSVPart2(rs);
-		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
-			return 0;
-		}
-	}
-	
-	public int addCSVFileEntry(SummaryVO o) {
-		try {
-			List<SummaryVO> rs = addCSVFileEntryPart1(o);
-			return updateCSVPart2(rs);
-		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
-			return 0;
-		}
-	}
-	
-	public int deleteCSVFileEntry(SummaryVO o) {
-		try {
-			List<SummaryVO> rs = deleteCSVFileEntryPart1(o);
-			return updateCSVPart2(rs);
-		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
-			return 0;
-		}
+	public int csvFileEntry(SummaryVO o, String type) {
+		List<SummaryVO> rs = null;
+		if(o==null) return 0;
+		if(type.equals(Constants.UPDATE))
+			rs = updateCSVFilePart1(o);
+		if(type.equals(Constants.ADD))
+			 rs = addCSVFileEntryPart1(o);
+		if(type.equals(Constants.DELETE))
+			 rs = deleteCSVFileEntryPart1(o);
+		if(rs==null || rs.isEmpty()) return 0;
+		return updateCSVPart2(rs);
 	}
 	
 	private List<SummaryVO> updateCSVFilePart1(SummaryVO o) {
@@ -152,11 +134,12 @@ public class SummaryDao{
 			}
 			return rs;
 		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 		return new ArrayList<>();
 	}
 	
+	// Keep all the objects plus one more to be added in the result
 	private List<SummaryVO> addCSVFileEntryPart1(SummaryVO o) {
 		String id = o.getId();
 		if(id==null) return new ArrayList<>();
@@ -190,7 +173,7 @@ public class SummaryDao{
 			rs.add(o);
 			return rs;
 		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 		return new ArrayList<>();
 	}
@@ -224,7 +207,7 @@ public class SummaryDao{
 			}
 			return rs;
 		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 		return new ArrayList<>();
 	}
@@ -235,7 +218,7 @@ public class SummaryDao{
 			List<String> list = objectToList(o);
 			return unsplit(list);
 		} catch(Exception e) {
-			logger.error(EXCEPTION, e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 		return "";
 	}
@@ -251,7 +234,7 @@ public class SummaryDao{
 			logger.info("new object "+rs.toString());
 			return rs;
 		} catch(Exception e) {
-			logger.error(EXCEPTION,e);
+			logger.error(Constants.EXCEPTION,e);
 			return new SummaryVO();
 		}
 	}
@@ -338,15 +321,19 @@ public class SummaryDao{
 	
 	private List<String> objectToList(SummaryVO o){
 		List<String> rs = new ArrayList<>();
-		rs.add(o.getId());
-		rs.add(o.getStudent());
-		rs.add(o.getStatus());
-		if(o.isMadeADifference()) rs.add("1");
-		else rs.add("0");
-		rs.add(o.getCoveredValue());
-		rs.add(o.getRecomendation());
-		if(o.getGender().equals("he")) rs.add("M");
-		else if(o.getGender().equals("she")) rs.add("F"); 
+		try {
+			rs.add(o.getId());
+			rs.add(o.getStudent());
+			rs.add(o.getStatus());
+			if(o.isMadeADifference()) rs.add("1");
+			else rs.add("0");
+			rs.add(o.getCoveredValue());
+			rs.add(o.getRecomendation());
+			if(o.getGender().equals("he")) rs.add("M");
+			else if(o.getGender().equals("she")) rs.add("F");
+		} catch(Exception e) {
+			logger.error(e);
+		}
 		
 		return rs;
 	}

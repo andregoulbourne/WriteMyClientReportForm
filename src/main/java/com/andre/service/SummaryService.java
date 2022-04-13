@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.andre.constants.Constants;
 import com.andre.dao.SummaryDao;
 import com.andre.model.SummaryVO;
 
@@ -39,17 +40,17 @@ public class SummaryService {
 	
 	public int updateSummary(SummaryVO o) {
 		setDataPath();
-		return dao.updateCSVFile(o);
+		return dao.csvFileEntry(o, Constants.UPDATE);
 	}
 	
 	public int addSummary(SummaryVO o) {
 		setDataPath();
-		return dao.addCSVFileEntry(o);
+		return dao.csvFileEntry(o, Constants.ADD);
 	}
 	
 	public int deleteSummary(SummaryVO o) {
 		setDataPath();
-		return dao.deleteCSVFileEntry(o);
+		return dao.csvFileEntry(o, Constants.DELETE);
 	}
 	
 	public String getValidationMsg() {

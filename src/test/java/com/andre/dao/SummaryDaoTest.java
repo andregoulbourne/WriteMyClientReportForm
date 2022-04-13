@@ -9,11 +9,15 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.andre.constants.Constants;
 import com.andre.model.SummaryVO;
 
 class SummaryDaoTest {
 	
 	private SummaryDao reader;
+	
+	private SummaryVO object1;
+	private SummaryVO object;
 	
 	@BeforeEach
 	void setup() {
@@ -28,24 +32,7 @@ class SummaryDaoTest {
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
 		List<SummaryVO> expected = new ArrayList<>();
-		SummaryVO object = new SummaryVO();
-		object.setId("1");
-		object.setStudent("Mike");
-		object.setStatus("1");
-		object.setMadeADifference(false);
-		object.setCoveredValue("definition of derivatives using limits and implicit differentiation");
-		object.setRecomendation("work more examples of the problem to keep the problem fresh in memory");
-		object.setGender("M");
 		expected.add(object);
-		
-		SummaryVO object1 = new SummaryVO();
-		object1.setId("2");
-		object1.setStudent("Saddy");
-		object1.setStatus("0");
-		object1.setMadeADifference(true);
-		object1.setCoveredValue("critical numbers");
-		object1.setRecomendation("work more examples of the problem to keep the problem fresh in memory");
-		object1.setGender("F");
 		expected.add(object1);
 		
 		
@@ -80,18 +67,18 @@ class SummaryDaoTest {
 	@Test
 	void testUpdateCSVFile_returnsZeroOrOne() {
 		
-		assertDoesNotThrow(() -> reader.updateCSVFile(null));
-		assertEquals(0,reader.updateCSVFile(null));
+		assertDoesNotThrow(() -> reader.csvFileEntry(null, Constants.UPDATE));
+		assertEquals(0,reader.csvFileEntry(null, Constants.UPDATE));
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		assertEquals(0,reader.updateCSVFile(null));
+		assertEquals(0,reader.csvFileEntry(null, Constants.UPDATE));
 		
 		SummaryVO o = new SummaryVO();
 		o.setStudent("Mike");
 		o.setId("1");
 		
-		assertEquals(1,reader.updateCSVFile(o));
+		assertEquals(1,reader.csvFileEntry(o, Constants.UPDATE));
 		
 		
 	}
@@ -99,12 +86,12 @@ class SummaryDaoTest {
 	@Test
 	void testAddAndDeleteCSVFileEntry_returnsZeroOrOne() {
 		
-		assertDoesNotThrow(() -> reader.addCSVFileEntry(null));
-		assertEquals(0,reader.addCSVFileEntry(null));
+		assertDoesNotThrow(() -> reader.csvFileEntry(null, Constants.ADD));
+		assertEquals(0,reader.csvFileEntry(null, Constants.ADD));
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		assertEquals(0,reader.addCSVFileEntry(null));
+		assertEquals(0,reader.csvFileEntry(null, Constants.ADD));
 		
 		SummaryVO o = new SummaryVO();
 		o.setId("3");
@@ -115,11 +102,13 @@ class SummaryDaoTest {
 		o.setStatus("2");
 		o.setStudent("Cool Kid");
 		
-		assertEquals(1,reader.addCSVFileEntry(o));
+		//Checking whether it add one the
+		assertEquals(1,reader.csvFileEntry(o, Constants.ADD));
+		assertEquals(0,reader.csvFileEntry(o, Constants.ADD));
 		
-		assertDoesNotThrow(() ->reader.deleteCSVFileEntry(null));
-		assertEquals(1,reader.deleteCSVFileEntry(o));
-		assertEquals(0,reader.deleteCSVFileEntry(o));
+		assertDoesNotThrow(() ->reader.csvFileEntry(null, Constants.DELETE));
+		assertEquals(1,reader.csvFileEntry(o,Constants.DELETE));
+		assertEquals(0,reader.csvFileEntry(o,Constants.DELETE));
 	}
 
 	
