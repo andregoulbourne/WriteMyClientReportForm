@@ -95,16 +95,19 @@ public class SummaryDao{
 		List<SummaryVO> rs = null;
 		if(o==null) return 0;
 		if(type.equals(Constants.UPDATE))
-			rs = updateCSVFilePart1(o);
+			rs = updateCSVFilePart1(o, Constants.UPDATE);
 		if(type.equals(Constants.ADD))
-			 rs = addCSVFileEntryPart1(o);
-		if(type.equals(Constants.DELETE))
-			 rs = deleteCSVFileEntryPart1(o);
+			 rs = updateCSVFilePart1(o, Constants.ADD);
+		if(type.equals(Constants.DELETE)) {
+			 rs = updateCSVFilePart1(o, Constants.DELETE);
+			 if(readCSVFile().size() == rs.size()) return 0;
+		}
 		if(rs==null || rs.isEmpty()) return 0;
 		return updateCSVPart2(rs);
 	}
 	
-	private List<SummaryVO> updateCSVFilePart1(SummaryVO o) {
+	// Keep all the objects plus one more to be added in the result: Add an example
+	private List<SummaryVO> updateCSVFilePart1(SummaryVO o, String type) {
 		String id = o.getId();
 		if(id==null) return new ArrayList<>();
 		
@@ -120,134 +123,61 @@ public class SummaryDao{
 				List<String> valuesList = split(sCurrentLine);
 				
 				SummaryVO object = listToObject(valuesList);
-				
-					if(object.getId().equals(id)) {
-						logger.info(String.format(CURRENTLINE,sCurrentLine));
-						SummaryVO rsObject = updateObjectNullFields(object, o);
-						rs.add(rsObject);
-					} else {
+					if(type.equals(Constants.UPDATE)) {
+						if(object.getId().equals(id)) {
+							logger.info(String.format(CURRENTLINE,sCurrentLine));
+							SummaryVO rsObject = updateObjectNullFields(object, o);
+							rs.add(rsObject);
+						} else {
+							rs.add(object);
+						}
+					} else if(type.equals(Constants.ADD)) {
+						if(object.getId().equals(id)) {
+							logger.info(String.format(CURRENTLINE,sCurrentLine));
+							validationMsg = "Summary already exist ...";
+							logger.info(validationMsg);
+							return new ArrayList<>();
+						} else {
+							rs.add(object);
+						}
+					} else if(type.equals(Constants.DELETE) && !object.getId().equals(id)) {
 						rs.add(object);
 					}
 				
 				} else firstRow = false;
 				
 			}
+			if(type.equals(Constants.ADD)) rs.add(o);
 			return rs;
 		} catch(Exception e) {
 			logger.error(Constants.EXCEPTION, e);
-		}
-		return new ArrayList<>();
-	}
-	
-	// Keep all the objects plus one more to be added in the result
-	private List<SummaryVO> addCSVFileEntryPart1(SummaryVO o) {
-		String id = o.getId();
-		if(id==null) return new ArrayList<>();
-		
-		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
-			List<SummaryVO> rs = new ArrayList<>();
-			
-			String sCurrentLine="";
-			boolean firstRow = true;
-			while((sCurrentLine = br.readLine()) != null) {
-				if(!firstRow) {
-				logger.info(String.format(CURRENTLINE,sCurrentLine));
-				
-				List<String> valuesList = split(sCurrentLine);
-				
-				SummaryVO object = listToObject(valuesList);
-				
-					if(object.getId().equals(id)) {
-						logger.info(String.format(CURRENTLINE,sCurrentLine));
-						validationMsg = "Summary already exist ...";
-						logger.info(validationMsg);
-						return new ArrayList<>();
-					} else {
-						rs.add(object);
-					}
-				
-				} else firstRow = false;
-				
-			}
-			
-			rs.add(o);
-			return rs;
-		} catch(Exception e) {
-			logger.error(Constants.EXCEPTION, e);
-		}
-		return new ArrayList<>();
-	}
-	
-	private List<SummaryVO> deleteCSVFileEntryPart1(SummaryVO o) {
-		String id = o.getId();
-		if(id==null) return new ArrayList<>();
-		SummaryVO entry=readCSVFileSingleEntry(id);
-		
-		if(entry.getId()==null) return new ArrayList<>();
-		
-		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
-			List<SummaryVO> rs = new ArrayList<>();
-			
-			String sCurrentLine="";
-			boolean firstRow = true;
-			while((sCurrentLine = br.readLine()) != null) {
-				if(!firstRow) {
-				logger.info(String.format(CURRENTLINE,sCurrentLine));
-				
-				List<String> valuesList = split(sCurrentLine);
-				
-				SummaryVO object = listToObject(valuesList);
-				
-					if(!object.getId().equals(id)) {
-						rs.add(object);
-					}
-				
-				} else firstRow = false;
-				
-			}
-			return rs;
-		} catch(Exception e) {
-			logger.error(Constants.EXCEPTION, e);
+			if(fileInPath.isBlank()) 
+				logger.error("dependency missing");
 		}
 		return new ArrayList<>();
 	}
 	
 	//Makes a new string for the Entry to be written to the Print Writer
 	public String getAnEntry(SummaryVO o) {
-		try {
-			List<String> list = objectToList(o);
-			return unsplit(list);
-		} catch(Exception e) {
-			logger.error(Constants.EXCEPTION, e);
-		}
-		return "";
+		List<String> list = objectToList(o);
+		return unsplit(list);
 	}
 	
 	private SummaryVO updateObjectNullFields(SummaryVO existing, SummaryVO rs) {
-		try {
-			if(rs.getId()==null) rs.setId(existing.getId());
-			if(rs.getCoveredValue()==null) rs.setCoveredValue(existing.getCoveredValue());
-			if(rs.getGender()==null) rs.setGender(existing.getGender());
-			if(rs.getRecomendation()==null) rs.setRecomendation(existing.getRecomendation());
-			if(rs.getStatus()==null) rs.setStatus(existing.getStatus());
-			if(rs.getStudent()==null) rs.setStudent(existing.getStudent());
-			logger.info("new object "+rs.toString());
-			return rs;
-		} catch(Exception e) {
-			logger.error(Constants.EXCEPTION,e);
-			return new SummaryVO();
-		}
+		if(rs.getId()==null) rs.setId(existing.getId());
+		if(rs.getCoveredValue()==null) rs.setCoveredValue(existing.getCoveredValue());
+		if(rs.getGender()==null) rs.setGender(existing.getGender());
+		if(rs.getRecomendation()==null) rs.setRecomendation(existing.getRecomendation());
+		if(rs.getStatus()==null) rs.setStatus(existing.getStatus());
+		if(rs.getStudent()==null) rs.setStudent(existing.getStudent());
+		logger.info("new object "+rs.toString());
+		return rs;
 	}
 	
 	private static final String HEADER = "ID,STUDENT_NAME,STATUS,MADE_A_DIFFERENCE,COVERED_VALUE,RECOMMENDATION,GENDER";
 	
 	private int updateCSVPart2(List<SummaryVO> list) {
 		List<String> rs = new ArrayList<>();
-		
-		if(list.isEmpty() || fileInPath==null) {
-			logger.error("dependency missing");
-			return 0;
-		}
 		
 		for(SummaryVO o: list) {
 			String entryString=getAnEntry(o);
@@ -295,31 +225,36 @@ public class SummaryDao{
 	
 	private SummaryVO summaryObject;
 	
-	private SummaryVO listToObject(List<String> list) {
-		summaryObject = new SummaryVO();
-		for(int i=0; i<list.size(); i++) {
-			int a = i+1;
-			if(a==1) {
-				summaryObject.setId(list.get(i));
-			}else if(a==2) {
-				summaryObject.setStudent(list.get(i));
-			} else if(a==3) {
-				summaryObject.setStatus(list.get(i));
-			} else if(a==4) {
-				setMadeDifference(list.get(i));
-			} else if(a==5) {
-				summaryObject.setCoveredValue(list.get(i));
-			} else if(a==6) {
-				summaryObject.setRecomendation(list.get(i));
-			} else if(a==7) {
-				setGender(list.get(i));
+	public SummaryVO listToObject(List<String> list) {
+		try {
+			summaryObject = new SummaryVO();
+			for(int i=0; i<list.size(); i++) {
+				int a = i+1;
+				if(a==1) {
+					summaryObject.setId(list.get(i));
+				}else if(a==2) {
+					summaryObject.setStudent(list.get(i));
+				} else if(a==3) {
+					summaryObject.setStatus(list.get(i));
+				} else if(a==4) {
+					setMadeDifference(list.get(i));
+				} else if(a==5) {
+					summaryObject.setCoveredValue(list.get(i));
+				} else if(a==6) {
+					summaryObject.setRecomendation(list.get(i));
+				} else if(a==7) {
+					setGender(list.get(i));
+				}
 			}
+			logger.info("List to object is ... ");
+			return summaryObject;
+		} catch(Exception e) {
+			logger.error(e);
+			return summaryObject;
 		}
-		logger.info("List to object is ... ");
-		return summaryObject;
 	}
 	
-	private List<String> objectToList(SummaryVO o){
+	public List<String> objectToList(SummaryVO o){
 		List<String> rs = new ArrayList<>();
 		try {
 			rs.add(o.getId());

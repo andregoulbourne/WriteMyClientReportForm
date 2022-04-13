@@ -85,14 +85,6 @@ class SummaryDaoTest {
 	
 	@Test
 	void testAddAndDeleteCSVFileEntry_returnsZeroOrOne() {
-		
-		assertDoesNotThrow(() -> reader.csvFileEntry(null, Constants.ADD));
-		assertEquals(0,reader.csvFileEntry(null, Constants.ADD));
-		
-		reader.setFileInPath("./src/test/resources/Summarys.csv");
-		
-		assertEquals(0,reader.csvFileEntry(null, Constants.ADD));
-		
 		SummaryVO o = new SummaryVO();
 		o.setId("3");
 		o.setCoveredValue("agag");
@@ -102,7 +94,19 @@ class SummaryDaoTest {
 		o.setStatus("2");
 		o.setStudent("Cool Kid");
 		
-		//Checking whether it add one the
+		assertDoesNotThrow(() -> reader.csvFileEntry(null, Constants.ADD));
+		assertEquals(0,reader.csvFileEntry(null, Constants.ADD));
+		
+		//Shows the behavior when the file path is blank
+		reader.setFileInPath("");
+		
+		assertEquals(0,reader.csvFileEntry(o, Constants.ADD));
+		
+		reader.setFileInPath("./src/test/resources/Summarys.csv");
+		
+		assertEquals(0,reader.csvFileEntry(null, Constants.ADD));
+		
+		//Checking whether it adds one the
 		assertEquals(1,reader.csvFileEntry(o, Constants.ADD));
 		assertEquals(0,reader.csvFileEntry(o, Constants.ADD));
 		
@@ -117,5 +121,15 @@ class SummaryDaoTest {
 		String validationMsg = "Some validation message";
 		reader.setValidationMsg(validationMsg);
 		assertEquals(validationMsg,reader.getValidationMsg());
+	}
+	
+	@Test
+	void testObjectToList() {
+		SummaryVO o = new SummaryVO();
+		o.setCoveredValue(null);
+		// Null pointer is thrown trying to check if a string value is equal to a non initiated value
+		assertDoesNotThrow(() -> reader.objectToList(new SummaryVO()));
+		
+		assertDoesNotThrow(() -> reader.listToObject(null));
 	}
 }
