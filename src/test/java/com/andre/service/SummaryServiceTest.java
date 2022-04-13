@@ -1,11 +1,13 @@
 package com.andre.service;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -85,5 +87,10 @@ class SummaryServiceTest {
 		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.deleteSummary(o));
+	}
+	
+	@Test
+	void testUtilityClassConstants() {
+		Assertions.assertThrows(Exception.class,() -> Constants.test());
 	}
 }

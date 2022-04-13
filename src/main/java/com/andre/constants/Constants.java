@@ -2,6 +2,10 @@ package com.andre.constants;
 
 public class Constants {
 	
+	public static void test() {
+		new Constants();
+	}
+	
 	private Constants() {
 	    throw new IllegalStateException("Utility class");
 	  }
