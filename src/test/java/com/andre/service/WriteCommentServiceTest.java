@@ -1,5 +1,6 @@
 package com.andre.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -35,5 +36,6 @@ class WriteCommentServiceTest {
 		givenList.add(object);
 		
 		assertEquals(expected, service.writeComment(givenList));
+		assertDoesNotThrow(() -> service.writeComment(null));
 	}
 }
