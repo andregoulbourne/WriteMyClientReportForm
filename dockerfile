@@ -20,7 +20,7 @@ WORKDIR /Backend
 COPY src/ /Backend/src
 COPY pom.xml /Backend/pom.xml
 
-COPY --from=nodebuild /Frontend/dist/WriteClientReport /Backend/webapp
+COPY --from=nodebuild /Frontend/dist/WriteClientReport /Backend/src/main/webapp
 
 RUN ["mvn", "clean", "package"]
 
