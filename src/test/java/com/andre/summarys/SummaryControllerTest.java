@@ -1,4 +1,4 @@
-package com.andre.controller;
+package com.andre.summarys;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,10 +15,10 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.andre.controllers.SummaryController;
-import com.andre.model.SummaryVO;
-import com.andre.service.SummaryService;
-import com.andre.service.WriteCommentService;
+import com.andre.summarys.SummaryController;
+import com.andre.summarys.SummaryService;
+import com.andre.summarys.SummaryVO;
+import com.andre.summarys.WriteCommentService;
 
 @SpringBootTest
 class SummaryControllerTest {

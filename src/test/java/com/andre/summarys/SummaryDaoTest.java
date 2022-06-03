@@ -1,4 +1,4 @@
-package com.andre.dao;
+package com.andre.summarys;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,7 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.andre.constants.Constants;
-import com.andre.model.SummaryVO;
+import com.andre.summarys.SummaryDao;
+import com.andre.summarys.SummaryVO;
 
 class SummaryDaoTest {
 	

@@ -1,4 +1,4 @@
-package com.andre.controllers;
+package com.andre.summarys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.andre.model.SummaryVO;
-import com.andre.service.SummaryService;
-import com.andre.service.WriteCommentService;
 
 @Controller
 @RequestMapping("summarys")

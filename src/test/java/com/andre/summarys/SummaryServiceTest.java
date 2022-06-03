@@ -1,4 +1,4 @@
-package com.andre.service;
+package com.andre.summarys;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,8 +14,9 @@ import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.andre.constants.Constants;
-import com.andre.dao.SummaryDao;
-import com.andre.model.SummaryVO;
+import com.andre.summarys.SummaryDao;
+import com.andre.summarys.SummaryService;
+import com.andre.summarys.SummaryVO;
 
 class SummaryServiceTest {
 	

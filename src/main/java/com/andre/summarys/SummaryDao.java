@@ -1,4 +1,4 @@
-package com.andre.dao;
+package com.andre.summarys;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.andre.constants.Constants;
-import com.andre.model.SummaryVO;
 
 @Repository
 public class SummaryDao{

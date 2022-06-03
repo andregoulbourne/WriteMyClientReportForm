@@ -1,4 +1,4 @@
-package com.andre.service;
+package com.andre.summarys;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.andre.constants.Constants;
-import com.andre.dao.SummaryDao;
-import com.andre.model.SummaryVO;
 
 @Service
 public class SummaryService {
