@@ -11,6 +11,8 @@ No data base reading and changing a csv file for the data. Containerized using d
 * Angular
 * CSS
 * Docker
+* JUnit
+* Selenium
 
 # Features
 * Editable grid using ag-grid
