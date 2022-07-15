@@ -21,7 +21,7 @@ public class SummaryDao{
 	private String fileInPath;
 	
 	public void setFileInPath(String fileInPath) {
-		if(fileInPath == null)
+		if(this.fileInPath == null)
 			this.fileInPath = fileInPath;
 	}
 	
