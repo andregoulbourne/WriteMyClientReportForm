@@ -21,8 +21,7 @@ public class SummaryDao{
 	private String fileInPath;
 	
 	public void setFileInPath(String fileInPath) {
-		if(this.fileInPath == null)
-			this.fileInPath = fileInPath;
+		this.fileInPath = fileInPath;
 	}
 	
 	private String validationMsg;
