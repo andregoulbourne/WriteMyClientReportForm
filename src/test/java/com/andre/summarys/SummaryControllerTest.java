@@ -15,11 +15,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.andre.summarys.SummaryController;
-import com.andre.summarys.SummaryService;
-import com.andre.summarys.SummaryVO;
-import com.andre.summarys.WriteCommentService;
-
 @SpringBootTest
 class SummaryControllerTest {
 	
@@ -32,9 +27,10 @@ class SummaryControllerTest {
 	@Mock
 	private SummaryService summaryService;
 	
+	
 	@BeforeEach
 	void init() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 	}
 	
 	@Test

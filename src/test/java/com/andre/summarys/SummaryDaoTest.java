@@ -10,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.andre.constants.Constants;
-import com.andre.summarys.SummaryDao;
-import com.andre.summarys.SummaryVO;
 
 class SummaryDaoTest {
 	

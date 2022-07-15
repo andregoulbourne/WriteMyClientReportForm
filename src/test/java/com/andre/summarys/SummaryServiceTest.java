@@ -1,22 +1,16 @@
 package com.andre.summarys;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.andre.constants.Constants;
-import com.andre.summarys.SummaryDao;
-import com.andre.summarys.SummaryService;
-import com.andre.summarys.SummaryVO;
 
 class SummaryServiceTest {
 	
@@ -27,17 +21,6 @@ class SummaryServiceTest {
 	void setup() {
 		dao = Mockito.mock(SummaryDao.class);
 	}
-	
-//	@Test
-//	void tmp() {
-//		try {
-//			String currentPath = new java.io.File(".").getCanonicalPath();
-//			System.out.println(currentPath);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		assertEquals(1, 1);
-//	}
 	
 	@Test
 	void testGetAllSummary(){
@@ -90,8 +73,4 @@ class SummaryServiceTest {
 		assertEquals(1,service.deleteSummary(o));
 	}
 	
-	@Test
-	void testUtilityClassConstants() {
-		Assertions.assertThrows(Exception.class,() -> Constants.test());
-	}
 }

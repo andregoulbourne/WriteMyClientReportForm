@@ -21,7 +21,8 @@ public class SummaryDao{
 	private String fileInPath;
 	
 	public void setFileInPath(String fileInPath) {
-		this.fileInPath = fileInPath;
+		if(fileInPath == null)
+			this.fileInPath = fileInPath;
 	}
 	
 	private String validationMsg;
@@ -34,8 +35,6 @@ public class SummaryDao{
 		this.validationMsg = validationMsg;
 	}
 
-	private static final String CURRENTLINE = "current Line Is ... %s";
-	
 	public List<SummaryVO> readCSVFile(String id, String type) {
 		
 		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
@@ -45,7 +44,7 @@ public class SummaryDao{
 			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format(CURRENTLINE,sCurrentLine));
+				logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
 				
 				List<String> valuesList = split(sCurrentLine);
 				
@@ -106,14 +105,14 @@ public class SummaryDao{
 			boolean firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format(CURRENTLINE,sCurrentLine));
+				logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
 				
 				List<String> valuesList = split(sCurrentLine);
 				
 				SummaryVO object = listToObject(valuesList);
 					if(type.equals(Constants.UPDATE)) {
 						if(object.getId().equals(id)) {
-							logger.info(String.format(CURRENTLINE,sCurrentLine));
+							logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
 							SummaryVO rsObject = updateObjectNullFields(object, o);
 							rs.add(rsObject);
 						} else {
@@ -121,7 +120,7 @@ public class SummaryDao{
 						}
 					} else if(type.equals(Constants.ADD)) {
 						if(object.getId().equals(id)) {
-							logger.info(String.format(CURRENTLINE,sCurrentLine));
+							logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
 							validationMsg = "Summary already exist ...";
 							logger.info(validationMsg);
 							return new ArrayList<>();
@@ -162,8 +161,6 @@ public class SummaryDao{
 		return rs;
 	}
 	
-	private static final String HEADER = "ID,STUDENT_NAME,STATUS,MADE_A_DIFFERENCE,COVERED_VALUE,RECOMMENDATION,GENDER";
-	
 	private int updateCSVPart2(List<SummaryVO> list) {
 		List<String> rs = new ArrayList<>();
 		
@@ -173,7 +170,7 @@ public class SummaryDao{
 		}
 		
 		try(PrintWriter writer = new PrintWriter(fileInPath,"UTF-8")) {
-			writer.println(HEADER);
+			writer.println(Constants.HEADER);
 			for(String s: rs) {
 				writer.println(s);
 			}

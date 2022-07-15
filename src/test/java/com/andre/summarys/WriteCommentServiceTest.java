@@ -8,9 +8,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.andre.summarys.SummaryVO;
-import com.andre.summarys.WriteCommentService;
-
 class WriteCommentServiceTest {
 	
 	@Test
