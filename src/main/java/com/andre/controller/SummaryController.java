@@ -1,4 +1,4 @@
-package com.andre.summarys;
+package com.andre.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.andre.constants.Constants;
 import com.andre.exceptions.ArraysAreNotTheSameSizeException;
+import com.andre.model.SummaryVO;
+import com.andre.service.SummaryService;
+import com.andre.service.WriteCommentService;
 import com.andre.template.ControllerTemplate;
 
 @Controller
 @RequestMapping("summarys")
 public class SummaryController extends ControllerTemplate {
 
-	protected static final Logger logger = Logger.getLogger(SummaryController.class);
+	private static final Logger logger = Logger.getLogger(SummaryController.class);
 	
 	@Autowired
 	private WriteCommentService writeCommentService;
