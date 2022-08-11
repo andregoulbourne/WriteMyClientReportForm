@@ -1,4 +1,4 @@
-<button (click)="getSelectedRows()">Generate Comments</button>
+<button (click)="writeComment()">Generate Comments</button>
 
 <ag-grid-angular
   #agGrid
@@ -6,7 +6,7 @@
   class="ag-theme-balham"
   [rowData]="rowData"
   [columnDefs]="colDef"
-  (cellValueChanged)="onCellValueChanged($event)"
+  (cellValueChanged)="updateSummary($event)"
 >
 </ag-grid-angular>
 <!--rowSelection="multiple"

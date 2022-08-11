@@ -27,6 +27,7 @@ public class WriteCommentService {
 						+ "\r\n"
 						+ "\r\n";
 				rs.append(summary);
+			logger.info("Comment written Successfully ...");
 			}
 			return rs.toString();
 		} catch (Exception e) {

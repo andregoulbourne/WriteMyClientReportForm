@@ -35,19 +35,17 @@ export class AppComponent {
 
   tutorComment:any;
 
-  getSelectedRows() {
+  writeComment() {
     const selectedNodes = this.agGrid?.api.getSelectedNodes();
     const selectedData = selectedNodes?.map(node => node.data);
-   /* const selectedDataStringPresentation = selectedData?.map(node => node.id + "..." + node.student)
-      .join(", ");
-    alert(`Selected Nodes: ${selectedDataStringPresentation}`)*/
+    
     this._http.post<any>('http://localhost:8081/summarys/writeAComment.do', selectedData/*JSON.stringify(selectedData),  {headers: {'Content-Type':'application/json'}}*/)
     .subscribe((data) => {
       this.tutorComment= data.comment;
     });
   }
 
-  onCellValueChanged(params: CellValueChangedEvent){
+  updateSummary(params: CellValueChangedEvent){
     console.log("Updating ...")
     const updatedSummary = params.data;
     this._http.post<any>('http://localhost:8081/summarys/updateSummary.do',updatedSummary)
