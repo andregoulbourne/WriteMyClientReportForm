@@ -10,6 +10,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class SeleniumUtil {
+	
+	private static final String CHROME_DRIVER_PATH = "./selenium/chromedriver";
 
 	@LocalServerPort
 	int randomServerPort;
@@ -31,7 +33,7 @@ public class SeleniumUtil {
 
 	private static WebDriver getWebDriverInstance() {
 		if (driver == null) {
-			System.setProperty("webdriver.chrome.driver", "./selenium/chromedriver.exe");
+			System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
 			driver = new ChromeDriver();
 		}
 
