@@ -26,7 +26,7 @@ pipeline {
 		stage ('Sonar Analysis Stage') {	
 			
 			steps {
-					bat "mvn sonar:sonar -Dsonar.projectKey=writemyclientreportforms -Dsonar.host.url=http://localhost:9000 -Dsonar.login=15c2d6948ded0009615b9b4c71d32f14c7f9809b"
+					bat "mvn clean verify sonar:sonar -Dsonar.projectKey=WriteMyClientReportForms -Dsonar.host.url=http://localhost:9000 -Dsonar.login=df12abc4ddea3dc13ec5f826e76ca4b499fe2d13"
 			}
 			
 		}

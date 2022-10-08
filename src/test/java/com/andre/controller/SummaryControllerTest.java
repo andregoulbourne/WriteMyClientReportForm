@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.andre.controller.SummaryController;
 import com.andre.model.SummaryVO;
 import com.andre.service.SummaryService;
 import com.andre.service.WriteCommentService;
