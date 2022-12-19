@@ -1,6 +1,18 @@
 package com.andre.model;
 
+import com.andre.constants.Constants;
+
 public class SummaryVO {
+	
+	public SummaryVO() {
+		super();
+		this.student=Constants.STUDENT;
+		this.status=Constants.SUMMARY_STATUS;
+		this.madeADifference = Constants.MADE_A_DIFFERENCE;
+		this.coveredValue=Constants.COVERED_VALUE;
+		this.recomendation=Constants.RECOMMENDATION;
+		this.gender=Constants.GENDER;
+	}
 	
 	private String id;
 	

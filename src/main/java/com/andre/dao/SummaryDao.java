@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.andre.constants.Constants;
 import com.andre.model.SummaryVO;
+import com.andre.util.StringUtil;
 
 @Repository
 public class SummaryDao{
@@ -50,9 +51,9 @@ public class SummaryDao{
 				
 				SummaryVO object = listToObject(valuesList);
 				
-					if(type.equals(Constants.ALL))
+					if(StringUtil.equals(type,Constants.ALL))
 						rs.add(object);
-					else if(type.equals(Constants.SINGLE) && object.getId().equals(id)) {
+					else if(StringUtil.equals(type,Constants.SINGLE) && StringUtil.equals(object.getId(),id)) {
 						rs.add(object);
 						return rs;
 					}
@@ -81,11 +82,11 @@ public class SummaryDao{
 	public int csvFileEntry(SummaryVO o, String type) {
 		List<SummaryVO> rs = null;
 		if(o==null) return 0;
-		if(type.equals(Constants.UPDATE))
+		if(StringUtil.equals(type,Constants.UPDATE))
 			rs = updateCSVFilePart1(o, Constants.UPDATE);
-		if(type.equals(Constants.ADD))
+		if(StringUtil.equals(type,Constants.ADD))
 			 rs = updateCSVFilePart1(o, Constants.ADD);
-		if(type.equals(Constants.DELETE)) {
+		if(StringUtil.equals(type,Constants.DELETE)) {
 			 rs = updateCSVFilePart1(o, Constants.DELETE);
 			 if(readCSVFile(null,Constants.ALL).size() == rs.size()) return 0;
 		}
@@ -97,6 +98,8 @@ public class SummaryDao{
 	private List<SummaryVO> updateCSVFilePart1(SummaryVO o, String type) {
 		String id = o.getId();
 		if(id==null) return new ArrayList<>();
+		
+		initializeDeaultValues(o);
 		
 		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
 			List<SummaryVO> rs = new ArrayList<>();
@@ -110,15 +113,14 @@ public class SummaryDao{
 				List<String> valuesList = split(sCurrentLine);
 				
 				SummaryVO object = listToObject(valuesList);
-					if(type.equals(Constants.UPDATE)) {
+					if(StringUtil.equals(type,Constants.UPDATE)) {
 						if(object.getId().equals(id)) {
 							logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
-							SummaryVO rsObject = updateObjectNullFields(object, o);
-							rs.add(rsObject);
+							rs.add(o);
 						} else {
 							rs.add(object);
 						}
-					} else if(type.equals(Constants.ADD)) {
+					} else if(StringUtil.equals(type,Constants.ADD)) {
 						if(object.getId().equals(id)) {
 							logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
 							validationMsg = "Summary already exist ...";
@@ -127,14 +129,14 @@ public class SummaryDao{
 						} else {
 							rs.add(object);
 						}
-					} else if(type.equals(Constants.DELETE) && !object.getId().equals(id)) {
+					} else if(StringUtil.equals(type,Constants.DELETE) && !StringUtil.equals(object.getId(),id)) {
 						rs.add(object);
 					}
 				
 				} else firstRow = false;
 				
 			}
-			if(type.equals(Constants.ADD)) rs.add(o);
+			if(StringUtil.equals(type,Constants.ADD)) rs.add(o);
 			return rs;
 		} catch(Exception e) {
 			logger.error(Constants.EXCEPTION, e);
@@ -151,14 +153,21 @@ public class SummaryDao{
 	}
 	
 	private SummaryVO updateObjectNullFields(SummaryVO existing, SummaryVO rs) {
-		if(rs.getId()==null) rs.setId(existing.getId());
-		if(rs.getCoveredValue()==null) rs.setCoveredValue(existing.getCoveredValue());
-		if(rs.getGender()==null) rs.setGender(existing.getGender());
-		if(rs.getRecomendation()==null) rs.setRecomendation(existing.getRecomendation());
-		if(rs.getStatus()==null) rs.setStatus(existing.getStatus());
-		if(rs.getStudent()==null) rs.setStudent(existing.getStudent());
+		if(StringUtil.isBlank(rs.getId())) rs.setId(existing.getId());
+		if(StringUtil.isBlank(rs.getCoveredValue())) rs.setCoveredValue(existing.getCoveredValue());
+		if(StringUtil.isBlank(rs.getGender())) rs.setGender(existing.getGender());
+		if(StringUtil.isBlank(rs.getRecomendation())) rs.setRecomendation(existing.getRecomendation());
+		if(StringUtil.isBlank(rs.getStatus())) rs.setStatus(existing.getStatus());
+		if(StringUtil.isBlank(rs.getStudent())) rs.setStudent(existing.getStudent());
 		logger.info("new object "+rs.toString());
 		return rs;
+	}
+	
+	private SummaryVO initializeDeaultValues(SummaryVO current) {
+		SummaryVO summaryVo = new SummaryVO();
+		updateObjectNullFields(summaryVo, current);
+		logger.info("new object "+current.toString());
+		return current;
 	}
 	
 	private int updateCSVPart2(List<SummaryVO> list) {
@@ -249,8 +258,8 @@ public class SummaryDao{
 			else rs.add("0");
 			rs.add(o.getCoveredValue());
 			rs.add(o.getRecomendation());
-			if(o.getGender().equals("he")) rs.add("M");
-			else if(o.getGender().equals("she")) rs.add("F");
+			if(StringUtil.equals(o.getGender(),"he")) rs.add("M");
+			else if(StringUtil.equals(o.getGender(),"she")) rs.add("F");
 		} catch(Exception e) {
 			logger.error(e);
 		}
@@ -259,12 +268,12 @@ public class SummaryDao{
 	}
 	
 	private void setMadeDifference(String in) {
-		if(in.equals("1")) summaryObject.setMadeADifference(true);
-		if(in.equals("0")) summaryObject.setMadeADifference(false);
+		if(StringUtil.equals(in,"1")) summaryObject.setMadeADifference(true);
+		if(StringUtil.equals(in,"0")) summaryObject.setMadeADifference(false);
 	}
 
 	private void setGender(String in) {
-		if(in.equalsIgnoreCase("M")) summaryObject.setGender("he");
-		if(in.equalsIgnoreCase("F")) summaryObject.setGender("she");
+		if(StringUtil.equalsIgnoreCase(in,"M")) summaryObject.setGender("he");
+		if(StringUtil.equalsIgnoreCase(in,"F")) summaryObject.setGender("she");
 	}
 }

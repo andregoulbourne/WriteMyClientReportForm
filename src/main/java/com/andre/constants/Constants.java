@@ -34,5 +34,12 @@ public class Constants {
 	public static final String MSG = "msg";
 	
 	public static final String STATUS= "status";
-
+	
+	//InitValues For Summary View Object
+	public static final String STUDENT= "<Student Name>";
+	public static final String SUMMARY_STATUS= "2";
+	public static final boolean MADE_A_DIFFERENCE= true;
+	public static final String COVERED_VALUE= "<What was covered>";
+	public static final String RECOMMENDATION= "<Recommendations>";
+	public static final String GENDER = "she";
 }
