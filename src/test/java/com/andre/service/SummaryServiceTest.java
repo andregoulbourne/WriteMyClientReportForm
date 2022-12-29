@@ -7,8 +7,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.mockito.MockitoAnnotations;
 
 import com.andre.constants.Constants;
 import com.andre.dao.SummaryDao;
@@ -16,45 +18,44 @@ import com.andre.model.SummaryVO;
 
 class SummaryServiceTest {
 	
-	private SummaryService service = new SummaryService();
+	@InjectMocks
+	private SummaryService service;
+	
+	@Mock
 	private SummaryDao dao;
+	
+	private static final String ID = "1";
 	
 	@BeforeEach
 	void setup() {
-		dao = Mockito.mock(SummaryDao.class);
+		MockitoAnnotations.openMocks(this);
 	}
 	
 	@Test
 	void testGetAllSummary(){
 		List<SummaryVO> rs = new ArrayList<>();
 		Mockito.when(dao.readCSVFile(null, Constants.ALL)).thenReturn(rs);
-		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(rs,service.getAllSummary());
 	}
 	
-	private static final String id = "1";
+	
 	
 	@Test
 	void testGetASummary() {
 		SummaryVO rs = new SummaryVO();
-		Mockito.when(dao.readCSVFileSingleEntry(id)).thenReturn(rs);
-		ReflectionTestUtils.setField(service,"dao", dao); 
+		Mockito.when(dao.readCSVFileSingleEntry(ID)).thenReturn(rs);
 		
-		assertEquals(rs,service.getASummary(id));
+		assertEquals(rs,service.getASummary(ID));
 	}
 	
 	private static final SummaryVO o = new SummaryVO();
 	
 	@Test
 	void testUpdateSummary() {
-		
-		ReflectionTestUtils.setField(service,"dao", dao);
-		
 		assertEquals(0,service.updateSummary(o));
 		
 		Mockito.when(dao.csvFileEntry(o, Constants.UPDATE)).thenReturn(1);
-		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.updateSummary(o));
 	}
@@ -62,7 +63,6 @@ class SummaryServiceTest {
 	@Test
 	void testAddSummary() {
 		Mockito.when(dao.csvFileEntry(o, Constants.ADD)).thenReturn(1);
-		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.addSummary(o));
 	}
@@ -70,7 +70,6 @@ class SummaryServiceTest {
 	@Test
 	void testDeleteSummary() {
 		Mockito.when(dao.csvFileEntry(o, Constants.DELETE)).thenReturn(1);
-		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(1,service.deleteSummary(o));
 	}
