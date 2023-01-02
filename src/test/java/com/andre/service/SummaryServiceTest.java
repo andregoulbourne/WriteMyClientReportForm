@@ -1,5 +1,6 @@
 package com.andre.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
@@ -74,4 +75,14 @@ class SummaryServiceTest {
 		assertEquals(1,service.deleteSummary(o));
 	}
 	
+	@Test
+	void testGetValidationMsg() {
+		String expectedMsg = "Expected Message";
+		assertDoesNotThrow(() -> service.setValidationMsg(expectedMsg));
+		
+		Mockito.when(dao.getValidationMsg())
+			.thenReturn(expectedMsg);
+		
+		assertEquals(expectedMsg, service.getValidationMsg());
+	}
 }
