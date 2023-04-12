@@ -1,4 +1,4 @@
-package com.andre.service;
+package com.andre.summary;
 
 import java.io.IOException;
 import java.util.List;
@@ -7,9 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.andre.constants.Constants;
-import com.andre.dao.SummaryDao;
-import com.andre.model.SummaryVO;
+import com.andre.utility.Constants;
 
 @Service
 public class SummaryService {

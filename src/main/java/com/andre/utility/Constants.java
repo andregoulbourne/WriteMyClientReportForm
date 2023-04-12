@@ -1,4 +1,4 @@
-package com.andre.constants;
+package com.andre.utility;
 
 public class Constants {
 	

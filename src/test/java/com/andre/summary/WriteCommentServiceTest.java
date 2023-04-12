@@ -1,4 +1,4 @@
-package com.andre.service;
+package com.andre.summary;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,7 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.andre.model.SummaryVO;
+import com.andre.summary.SummaryVO;
+import com.andre.summary.WriteCommentService;
 
 class WriteCommentServiceTest {
 	

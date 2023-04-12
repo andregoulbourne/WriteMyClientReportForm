@@ -1,9 +1,11 @@
-package com.andre.model;
+package com.andre.summary;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.andre.summary.SummaryVO;
 
 
 
