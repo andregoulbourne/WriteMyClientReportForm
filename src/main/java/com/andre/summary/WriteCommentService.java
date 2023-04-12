@@ -1,11 +1,9 @@
-package com.andre.service;
+package com.andre.summary;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-
-import com.andre.model.SummaryVO;
 
 @Service
 public class WriteCommentService {

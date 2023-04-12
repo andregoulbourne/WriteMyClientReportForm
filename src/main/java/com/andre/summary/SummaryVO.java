@@ -1,4 +1,4 @@
-package com.andre.model;
+package com.andre.summary;
 
 public class SummaryVO {
 	
