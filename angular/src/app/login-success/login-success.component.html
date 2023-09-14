@@ -1,0 +1,18 @@
+<button (click)="writeComment()">Generate Comments</button>
+<button (click)="addDefaultInitializedSummary()">Initialize a Summary</button>
+<button (click)="deleteSummary()">Delete Summary</button>
+<ag-grid-angular
+  #agGrid
+  style="width: 1500px; height: 150px;"
+  class="ag-theme-balham"
+  [rowData]="rowData"
+  [columnDefs]="colDef"
+  (cellValueChanged)="updateSummary($event)"
+>
+</ag-grid-angular>
+<!--rowSelection="multiple"
+enable mutliple selections
+-->
+
+
+<p>{{tutorComment}}</p>

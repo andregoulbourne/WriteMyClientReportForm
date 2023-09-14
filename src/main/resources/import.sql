@@ -1,0 +1,1 @@
+INSERT INTO USERS(ID,USERNAME,PWD,ADMIN,VENDOR,FIRST_NAME,LAST_NAME,EMAIL_ID) VALUES (1,'SA','SA',true,false,'FirstName','LastName','test@test.com');
