@@ -1,24 +1,25 @@
 package com.andre.endtoend;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-
-import com.andre.selenium.SeleniumUtil;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.andre.selenium.SeleniumUtil;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AppTest extends SeleniumUtil {
 
 	@Test
 	@Order(1)
-	void testUrl_getPage() throws InterruptedException {
+	void testUrl_getPage() {
 		assertEquals("WriteClientReport",driver.getTitle());
 	}
 

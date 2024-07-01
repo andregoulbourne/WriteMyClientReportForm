@@ -1,8 +1,11 @@
 package com.andre.selenium;
 
-import com.andre.WriteMyClientReportForm;
-import com.andre.exceptions.ChromeDriverMissingException;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import java.io.File;
+import java.net.URL;
+import java.time.Duration;
+import java.util.HashMap;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,32 +14,47 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.util.concurrent.TimeUnit;
+import com.andre.WriteMyClientReportForm;
+import com.andre.exceptions.ChromeDriverMissingException;
 
-public class SeleniumUtil {
+public abstract class SeleniumUtil {
 
 	private static final Logger logger = Logger.getLogger(SeleniumUtil.class);
+	
+	private static final String LOCAL = "local";
+	
+	
+	private static final String OS_NAME = "os.name";
 
-	private static SeleniumUtil instance;
-
+	private static final String CHROME_DRIVER_PATH_LINUX = "./selenium/chromedriver";
+	private static final String CHROME_DRIVER_PATH_WINDOWS = "./selenium/chromedriver.exe";
+	
+	//URL to my locally installed selenium grid
+	private static final String SELENIUM_GRID_URL = "http://localhost:4444";
+	
+	
 	protected static WebDriver driver;
-
-	@BeforeEach
-	void setupSelenium() throws ChromeDriverMissingException {
+	
+	static {
 		try{
 			if(driver == null) {
 				startApplication();
 
 				driver = getWebDriverInstance();
-				driver.manage().window().maximize();
 				driver.get("http://localhost:" + 8081 + "/");
 				waitSeconds(5);
 			}
-			waitSeconds(3);
 		} catch(Exception e){
 			logger.error("Setting up in selenium util, "+ e.getMessage());
 		}
+	}
+
+	@BeforeEach
+	void setupSelenium() throws InterruptedException {
+		waitSeconds(3);
 	}
 
 	@AfterEach
@@ -48,21 +66,34 @@ public class SeleniumUtil {
 		}
 	}
 
-	protected void waitSeconds(int seconds) throws InterruptedException {
+	protected static void waitSeconds(int seconds) throws InterruptedException {
 		long miliSeconds = seconds * 1000L;
-
-		synchronized (this){
-			wait(miliSeconds);
-		}
+		Thread.sleep(miliSeconds);
 	}
 
 	private static WebDriver getWebDriverInstance() throws ChromeDriverMissingException {
 		try{
 			if (driver == null) {
-				WebDriverManager.chromedriver().setup();
-				ChromeOptions options = new ChromeOptions();
-				driver = new ChromeDriver();
-				driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);;
+				ChromeOptions options = getChromeOptions();
+				if(isLocalSelenium()) {
+					String os = System.getProperty(OS_NAME);
+					if(os.equals("Linux")) {
+						System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH_LINUX);
+					}else if(os.contains("Windows")) {
+						System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH_WINDOWS);
+					}else {
+						throw new ChromeDriverMissingException();
+					}
+					
+					
+					driver = new ChromeDriver(options);
+				} else {
+					driver = new RemoteWebDriver(new URL(SELENIUM_GRID_URL), options);
+					((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
+				}
+			
+				
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
 			}
 		} catch(Exception e){
 			logger.error("An exception occurred while setting chrome web driver , "+ e.getMessage());
@@ -71,8 +102,29 @@ public class SeleniumUtil {
 
 		return driver;
 	}
+	
+	private static boolean isLocalSelenium() {
+		return StringUtils.equals(System.getProperty(LOCAL), "Y");
+	}
+	
+	private static ChromeOptions getChromeOptions() {
+		ChromeOptions options = new ChromeOptions();
+		String downloadDir = "./src/test/resources/Selenium/downloads";
+		
+		var prefs = new HashMap<String, Object>();
+		
+		if(isLocalSelenium()) {
+			prefs.put("download.default_directory", new File(downloadDir).getAbsolutePath());
+			options.setExperimentalOption("prefs", prefs);
+		}
+		options.setAcceptInsecureCerts(true);
+		options.addArguments("--start-maximized");
+		options.setCapability("se:downloadsEnabled", true);
+		options.setCapability("se:name", "writeMyClientReportFormApp");
+		return options;
+	}
 
-	private void startApplication() throws InterruptedException {
+	private static void startApplication() throws InterruptedException {
 		String[] args = {"-Dserver.port=8081", "-DskipTests"};
 		WriteMyClientReportForm.main(args);
 		waitSeconds(5);
