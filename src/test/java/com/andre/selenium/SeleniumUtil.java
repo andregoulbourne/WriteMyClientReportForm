@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.NoAlertPresentException;
@@ -46,6 +45,8 @@ public abstract class SeleniumUtil {
 				driver = getWebDriverInstance();
 				driver.get("http://localhost:" + 8081 + "/");
 				waitSeconds(5);
+				
+				Runtime.getRuntime().addShutdownHook(new Thread(SeleniumUtil::tearDownSelenium));
 			}
 		} catch(Exception e){
 			logger.error("Setting up in selenium util, "+ e.getMessage());
@@ -57,10 +58,10 @@ public abstract class SeleniumUtil {
 		waitSeconds(3);
 	}
 
-	@AfterEach
-	void tearDownSelenium() {
+	private static void tearDownSelenium() {
 		try{
-			//driver.quit();
+			// clean up files from the download directory
+			driver.quit();
 		} catch(Exception e){
 			logger.error("Tearing Down in selenium util, "+ e.getMessage());
 		}
