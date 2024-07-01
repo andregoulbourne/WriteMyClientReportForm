@@ -1,4 +1,4 @@
-package com.andre.endtoend;
+package com.andre.selenium.endtoend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

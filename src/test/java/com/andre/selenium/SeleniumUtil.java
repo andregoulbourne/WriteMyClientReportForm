@@ -32,7 +32,7 @@ public abstract class SeleniumUtil {
 	private static final String CHROME_DRIVER_PATH_WINDOWS = "./selenium/chromedriver.exe";
 	
 	//URL to my locally installed selenium grid
-	private static final String SELENIUM_GRID_URL = "http://localhost:4444";
+	private static final String SELENIUM_GRID_URL = "http://localhost:4444/";
 	
 	
 	protected static WebDriver driver;
@@ -49,7 +49,7 @@ public abstract class SeleniumUtil {
 				Runtime.getRuntime().addShutdownHook(new Thread(SeleniumUtil::tearDownSelenium));
 			}
 		} catch(Exception e){
-			logger.error("Setting up in selenium util, "+ e.getMessage());
+			logger.error("Setting up in selenium util, ", e);
 		}
 	}
 
@@ -97,7 +97,7 @@ public abstract class SeleniumUtil {
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
 			}
 		} catch(Exception e){
-			logger.error("An exception occurred while setting chrome web driver , "+ e.getMessage());
+			logger.error("An exception occurred while setting chrome web driver , ", e);
 			throw new ChromeDriverMissingException();
 		}
 
@@ -120,7 +120,8 @@ public abstract class SeleniumUtil {
 		}
 		options.setAcceptInsecureCerts(true);
 		options.addArguments("--start-maximized");
-		options.setCapability("se:downloadsEnabled", true);
+		//se downloadsEnabled seem to break selenium grid if set when using a stand alone grid
+		//options.setCapability("se:downloadsEnabled", true);
 		options.setCapability("se:name", "writeMyClientReportFormApp");
 		return options;
 	}
