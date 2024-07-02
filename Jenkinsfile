@@ -33,7 +33,7 @@ pipeline {
 		
 		stage ('UI Testing Stage') {	
 			
-			when { branch 'main' }
+			when { expression { return env.LS_GIT_BRANCH  ==~ "main.*"} }
 				
 			steps {
 					bat "mvn -Dtest=com.andre.selenium.**.*.* test surefire-report:report"
