@@ -33,7 +33,7 @@ pipeline {
 		
 		stage ('UI Testing Stage') {	
 			
-			when { branch 'master' }
+			when { branch 'main' }
 				
 			steps {
 					bat "mvn -Dtest=com.andre.selenium.**.*.* test surefire-report:report"
