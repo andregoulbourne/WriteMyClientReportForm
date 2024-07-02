@@ -47,17 +47,22 @@ pipeline {
 		
 	}
 	
-	success {
-		publishHTML (
-			target : [
-				allowMissing: false,
- 				alwaysLinkToLastBuild: true,
- 				keepAll: false,
- 				reportDir: 'target/site',
- 				reportFiles: 'surefire-report.html',
- 				reportName: 'Selenium UI Test Report',
- 				reportTitles: ''
- 		])
+	post {
+	
+		success {
+			publishHTML (
+				target : [
+					allowMissing: false,
+	 				alwaysLinkToLastBuild: true,
+	 				keepAll: false,
+	 				reportDir: 'target/site',
+	 				reportFiles: 'surefire-report.html',
+	 				reportName: 'Selenium UI Test Report',
+	 				reportTitles: ''
+	 		])
+		}
+	
 	}
+	
 	
 }
