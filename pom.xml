@@ -141,6 +141,9 @@
 					<systemPropertyVariables>
                 		<jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
             		</systemPropertyVariables>
+            		<excludes>
+						<exclude>com/andre/selenium/**/*Test*.java</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 			<plugin>
