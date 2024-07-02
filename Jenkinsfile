@@ -6,6 +6,10 @@ pipeline {
 		jdk 'jdk17'
 	}
 	
+	environment {
+    	BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
+  	}
+	
 	stages {
 		stage ('Compile Stage') {	
 			
@@ -33,7 +37,7 @@ pipeline {
 		
 		stage ('UI Testing Stage') {	
 			
-			when { expression { return env.LS_GIT_BRANCH  ==~ "main.*"} }
+			when { expression { return env.BRANCH_NAME  ==~ "main.*"} }
 				
 			steps {
 					bat "mvn -Dtest=com.andre.selenium.**.*.* test surefire-report:report"
