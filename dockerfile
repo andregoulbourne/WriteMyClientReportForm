@@ -14,7 +14,7 @@ COPY angular/tsconfig.spec.json /Frontend
 RUN ["npm", "install"]
 RUN ["npm", "run", "build"]
 
-FROM maven:3.8.1-jdk-8 AS build
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /Backend
 
 COPY src/ /Backend/src
@@ -24,7 +24,7 @@ COPY --from=nodebuild /Frontend/dist/WriteClientReport /Backend/src/main/webapp
 
 RUN ["mvn", "clean", "package"]
 
-FROM openjdk:8-jdk-buster
+FROM openjdk:17-jdk-buster
 
 COPY --from=build /Backend/src/main/resources /src/main/resources
 COPY --from=build /Backend/target/WriteClientReportForm-0.0.1-SNAPSHOT.war app.war
