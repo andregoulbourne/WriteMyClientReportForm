@@ -22,7 +22,7 @@ COPY pom.xml /Backend/pom.xml
 
 COPY --from=nodebuild /Frontend/dist/WriteClientReport /Backend/src/main/webapp
 
-RUN ["mvn", "clean", "package"]
+RUN ["mvn", "clean", "package", "spring-boot:repackage"]
 
 FROM openjdk:17-jdk-buster
 
