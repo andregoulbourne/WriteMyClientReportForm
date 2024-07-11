@@ -122,6 +122,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${org.springframework.boot.version}</version>
 				<configuration>
+            		<mainClass>com.andre.WriteMyClientReportForm</mainClass>
+            		<layout>WAR</layout>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
