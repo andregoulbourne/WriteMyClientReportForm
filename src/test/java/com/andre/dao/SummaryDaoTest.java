@@ -8,12 +8,15 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 
 import com.andre.constants.Constants;
 import com.andre.model.SummaryVO;
 
 class SummaryDaoTest {
 	
+	@InjectMocks
 	private SummaryDao reader;
 	
 	private SummaryVO object1;
@@ -21,7 +24,7 @@ class SummaryDaoTest {
 	
 	@BeforeEach
 	void setup() {
-		reader = new SummaryDao();
+		MockitoAnnotations.openMocks(this);
 	}
 	
 	@Test
@@ -49,13 +52,13 @@ class SummaryDaoTest {
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
 		
-		SummaryVO object = new SummaryVO();
+		object = new SummaryVO();
 		object.setId("1");
 		object.setStudent("Mike");
 		object.setStatus("1");
 		object.setMadeADifference(false);
 		object.setCoveredValue("definition of derivatives using limits and implicit differentiation");
-		object.setRecomendation("work more examples of the problem to keep the problem fresh in memory");
+		object.setRecommendation("work more examples of the problem to keep the problem fresh in memory");
 		object.setGender("M");
 		
 		
@@ -90,7 +93,7 @@ class SummaryDaoTest {
 		o.setCoveredValue("agag");
 		o.setGender("he");
 		o.setMadeADifference(false);
-		o.setRecomendation("afhakf");
+		o.setRecommendation("afhakf");
 		o.setStatus("2");
 		o.setStudent("Cool Kid");
 		

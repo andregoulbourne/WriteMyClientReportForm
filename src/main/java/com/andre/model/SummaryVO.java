@@ -14,7 +14,7 @@ public class SummaryVO {
 	
 	private String coveredValue;
 	
-	private String recomendation;
+	private String recommendation;
 	
 	private String gender;
 	
@@ -66,18 +66,18 @@ public class SummaryVO {
 		this.coveredValue = coveredValue;
 	}
 
-	public String getRecomendation() {
-		return recomendation;
+	public String getRecommendation() {
+		return recommendation;
 	}
 
-	public void setRecomendation(String recomendation) {
-		this.recomendation = recomendation;
+	public void setRecommendation(String recommendation) {
+		this.recommendation = recommendation;
 	}
 
 	@Override
 	public String toString() {
 		return "SummaryObjectVO [id=" + id + ", student=" + student + ", status=" + status + ", madeADifference="
-				+ madeADifference + ", coveredValue=" + coveredValue + ", recomendation=" + recomendation + ", gender="
+				+ madeADifference + ", coveredValue=" + coveredValue + ", recomendation=" + recommendation + ", gender="
 				+ gender + "]";
 	}
 

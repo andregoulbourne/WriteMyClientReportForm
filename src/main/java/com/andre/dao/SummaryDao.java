@@ -1,14 +1,12 @@
 package com.andre.dao;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.andre.constants.Constants;
@@ -17,38 +15,27 @@ import com.andre.model.SummaryVO;
 @Repository
 public class SummaryDao{
 	
-	private static final Logger logger = Logger.getLogger(SummaryDao.class);
+	private static final Logger logger = LoggerFactory.getLogger(SummaryDao.class);
 	
 	private String fileInPath;
 	
-	public void setFileInPath(String fileInPath) {
-		this.fileInPath = fileInPath;
-	}
-	
 	private String validationMsg;
-	
-	public String getValidationMsg() {
-		return validationMsg;
-	}
-	
-	public void setValidationMsg(String validationMsg) {
-		this.validationMsg = validationMsg;
-	}
+
 
 	public List<SummaryVO> readCSVFile(String id, String type) {
 		
 		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
-			List<SummaryVO> rs = new ArrayList<>();
+			var rs = new ArrayList<SummaryVO>();
 			
-			String sCurrentLine="";
-			boolean firstRow = true;
+			var sCurrentLine="";
+			var firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
+				logger.info(Constants.CURRENT_LINE, sCurrentLine);
 				
-				List<String> valuesList = split(sCurrentLine);
+				var valuesList = split(sCurrentLine);
 				
-				SummaryVO object = listToObject(valuesList);
+				var object = listToObject(valuesList);
 				
 					if(type.equals(Constants.ALL))
 						rs.add(object);
@@ -95,38 +82,25 @@ public class SummaryDao{
 	
 	// Keep all the objects plus one more to be added in the result: Add an example
 	private List<SummaryVO> updateCSVFilePart1(SummaryVO o, String type) {
-		String id = o.getId();
+		var id = o.getId();
 		if(id==null) return new ArrayList<>();
 		
 		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
-			List<SummaryVO> rs = new ArrayList<>();
+			var rs = new ArrayList<SummaryVO>();
 			
-			String sCurrentLine="";
-			boolean firstRow = true;
+			var sCurrentLine="";
+			var firstRow = true;
 			while((sCurrentLine = br.readLine()) != null) {
 				if(!firstRow) {
-				logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
+				logger.info(Constants.CURRENT_LINE, sCurrentLine);
 				
 				List<String> valuesList = split(sCurrentLine);
 				
 				SummaryVO object = listToObject(valuesList);
 					if(type.equals(Constants.UPDATE)) {
-						if(object.getId().equals(id)) {
-							logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
-							SummaryVO rsObject = updateObjectNullFields(object, o);
-							rs.add(rsObject);
-						} else {
-							rs.add(object);
-						}
+						processUpdateSummaryVO(object, o, id, sCurrentLine, rs);
 					} else if(type.equals(Constants.ADD)) {
-						if(object.getId().equals(id)) {
-							logger.info(String.format(Constants.CURRENTLINE,sCurrentLine));
-							validationMsg = "Summary already exist ...";
-							logger.info(validationMsg);
-							return new ArrayList<>();
-						} else {
-							rs.add(object);
-						}
+						processAddSummaryVO(object, id, sCurrentLine, rs);
 					} else if(type.equals(Constants.DELETE) && !object.getId().equals(id)) {
 						rs.add(object);
 					}
@@ -143,6 +117,27 @@ public class SummaryDao{
 		}
 		return new ArrayList<>();
 	}
+
+	private void processUpdateSummaryVO(SummaryVO object, SummaryVO o, String id, String sCurrentLine, List<SummaryVO> rs){
+		if(object.getId().equals(id)) {
+			logger.info(Constants.CURRENT_LINE, sCurrentLine);
+			SummaryVO rsObject = updateObjectNullFields(object, o);
+			rs.add(rsObject);
+		} else {
+			rs.add(object);
+		}
+	}
+
+	private void processAddSummaryVO(SummaryVO object, String id, String sCurrentLine, List<SummaryVO> rs){
+		if(object.getId().equals(id)) {
+			logger.info(Constants.CURRENT_LINE, sCurrentLine);
+			validationMsg = "Summary already exist ...";
+			logger.info(validationMsg);
+			throw new IllegalStateException(validationMsg);
+		} else {
+			rs.add(object);
+		}
+	}
 	
 	//Makes a new string for the Entry to be written to the Print Writer
 	public String getAnEntry(SummaryVO o) {
@@ -154,10 +149,10 @@ public class SummaryDao{
 		if(rs.getId()==null) rs.setId(existing.getId());
 		if(rs.getCoveredValue()==null) rs.setCoveredValue(existing.getCoveredValue());
 		if(rs.getGender()==null) rs.setGender(existing.getGender());
-		if(rs.getRecomendation()==null) rs.setRecomendation(existing.getRecomendation());
+		if(rs.getRecommendation()==null) rs.setRecommendation(existing.getRecommendation());
 		if(rs.getStatus()==null) rs.setStatus(existing.getStatus());
 		if(rs.getStudent()==null) rs.setStudent(existing.getStudent());
-		logger.info("new object "+rs.toString());
+		logger.info("new object {}", rs);
 		return rs;
 	}
 	
@@ -169,7 +164,7 @@ public class SummaryDao{
 			if(!entryString.isEmpty()) rs.add(entryString);
 		}
 		
-		try(PrintWriter writer = new PrintWriter(fileInPath,"UTF-8")) {
+		try(PrintWriter writer = new PrintWriter(fileInPath, StandardCharsets.UTF_8)) {
 			writer.println(Constants.HEADER);
 			for(String s: rs) {
 				writer.println(s);
@@ -177,9 +172,11 @@ public class SummaryDao{
 			logger.info("Finished Updating CSV file ... ");
 			return 1;
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			logger.error(e);
-		}
-		return 0;
+			logger.error(Constants.EXCEPTION, e);
+		} catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+        return 0;
 	}
 	
 	private List<String> split(String in){
@@ -195,14 +192,14 @@ public class SummaryDao{
 				storedResult = new StringBuilder();
 			}
 		}
-		logger.info(String.format("valueList Once splited is ... %s",valuesList.toString()));
+		logger.info("valueList Once splited is ... {}", valuesList);
 		return valuesList;
 	}
 	
 	private String unsplit(List<String> in) {
 		StringBuilder rs = new StringBuilder();
 		for(String s: in) {
-			rs.append("\""+s+"\",");
+			rs.append("\"").append(s).append("\",");
 		}
 		rs.deleteCharAt(rs.length()-1);
 		return rs.toString();
@@ -226,7 +223,7 @@ public class SummaryDao{
 				} else if(a==5) {
 					summaryObject.setCoveredValue(list.get(i));
 				} else if(a==6) {
-					summaryObject.setRecomendation(list.get(i));
+					summaryObject.setRecommendation(list.get(i));
 				} else if(a==7) {
 					setGender(list.get(i));
 				}
@@ -234,7 +231,7 @@ public class SummaryDao{
 			logger.info("List to object is ... ");
 			return summaryObject;
 		} catch(Exception e) {
-			logger.error(e);
+			logger.error(Constants.EXCEPTION, e);
 			return summaryObject;
 		}
 	}
@@ -248,11 +245,11 @@ public class SummaryDao{
 			if(o.isMadeADifference()) rs.add("1");
 			else rs.add("0");
 			rs.add(o.getCoveredValue());
-			rs.add(o.getRecomendation());
+			rs.add(o.getRecommendation());
 			if(o.getGender().equals("he")) rs.add("M");
 			else if(o.getGender().equals("she")) rs.add("F");
 		} catch(Exception e) {
-			logger.error(e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 		
 		return rs;
@@ -266,5 +263,17 @@ public class SummaryDao{
 	private void setGender(String in) {
 		if(in.equalsIgnoreCase("M")) summaryObject.setGender("he");
 		if(in.equalsIgnoreCase("F")) summaryObject.setGender("she");
+	}
+
+	public void setFileInPath(String fileInPath) {
+		this.fileInPath = fileInPath;
+	}
+
+	public String getValidationMsg() {
+		return validationMsg;
+	}
+
+	public void setValidationMsg(String validationMsg) {
+		this.validationMsg = validationMsg;
 	}
 }

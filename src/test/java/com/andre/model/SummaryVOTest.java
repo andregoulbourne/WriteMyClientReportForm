@@ -55,8 +55,8 @@ class SummaryVOTest {
 	@Test
 	void testGetterAndSetters_setAnotherRecomendation() {
 		String expectedResult = "1";
-		summaryObject.setRecomendation("1");
-		assertEquals(expectedResult, summaryObject.getRecomendation());
+		summaryObject.setRecommendation("1");
+		assertEquals(expectedResult, summaryObject.getRecommendation());
 	}
 	
 	@Test
