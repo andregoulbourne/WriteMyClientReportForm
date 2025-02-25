@@ -10,7 +10,7 @@ import com.andre.exceptions.ArraysAreNotTheSameSizeException;
 class ControllerTemplateTest {
 
 	@Test
-	void testPutEntriesIntoTheResponseMap_throwArraysAreNotTheSameSizeException() throws ArraysAreNotTheSameSizeException {
+	void testPutEntriesIntoTheResponseMap_throwArraysAreNotTheSameSizeException() {
 		ControllerTemplate controllerTemplate = new ControllerTemplate(); 
 		
 		String[] keys = {Constants.DATA,Constants.MSG};
