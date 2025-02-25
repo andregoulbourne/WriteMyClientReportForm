@@ -1,10 +1,14 @@
 package com.andre.dao;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -18,33 +22,34 @@ public class SummaryDao{
 	private static final Logger logger = LoggerFactory.getLogger(SummaryDao.class);
 	
 	private String fileInPath;
-	
+
 	private String validationMsg;
 
 
 	public List<SummaryVO> readCSVFile(String id, String type) {
-		
-		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
+
+		try (Reader reader = Files.newBufferedReader(Path.of(fileInPath)); CSVReader csvReader = new CSVReader(reader)) {
 			var rs = new ArrayList<SummaryVO>();
-			
-			var sCurrentLine="";
+
+			String[] line;
 			var firstRow = true;
-			while((sCurrentLine = br.readLine()) != null) {
+			while ((line = csvReader.readNext()) != null) {
 				if(!firstRow) {
-				logger.info(Constants.CURRENT_LINE, sCurrentLine);
-				
-				var valuesList = split(sCurrentLine);
-				
-				var object = listToObject(valuesList);
-				
-					if(type.equals(Constants.ALL))
-						rs.add(object);
-					else if(type.equals(Constants.SINGLE) && object.getId().equals(id)) {
-						rs.add(object);
-						return rs;
-					}
-				
-				} else firstRow = false;
+					var valuesList = Arrays.asList(line);
+					logger.info(Constants.CURRENT_LINE, Arrays.asList(line));
+
+					var object = listToObject(valuesList);
+
+						if(type.equals(Constants.ALL))
+							rs.add(object);
+						else if(type.equals(Constants.SINGLE) && object.getId().equals(id)) {
+							rs.add(object);
+							return rs;
+						}
+
+				}
+				else
+					firstRow = false;
 				
 			}
 			return rs;
@@ -84,43 +89,43 @@ public class SummaryDao{
 	private List<SummaryVO> updateCSVFilePart1(SummaryVO o, String type) {
 		var id = o.getId();
 		if(id==null) return new ArrayList<>();
-		
-		try (BufferedReader br = new BufferedReader( new FileReader(fileInPath))) {
+
+		try (Reader reader = Files.newBufferedReader(Path.of(fileInPath)); CSVReader csvReader = new CSVReader(reader)) {
 			var rs = new ArrayList<SummaryVO>();
-			
-			var sCurrentLine="";
+
+			String[] line;
 			var firstRow = true;
-			while((sCurrentLine = br.readLine()) != null) {
-				if(!firstRow) {
-				logger.info(Constants.CURRENT_LINE, sCurrentLine);
-				
-				List<String> valuesList = split(sCurrentLine);
-				
-				SummaryVO object = listToObject(valuesList);
-					if(type.equals(Constants.UPDATE)) {
-						processUpdateSummaryVO(object, o, id, sCurrentLine, rs);
-					} else if(type.equals(Constants.ADD)) {
-						processAddSummaryVO(object, id, sCurrentLine, rs);
-					} else if(type.equals(Constants.DELETE) && !object.getId().equals(id)) {
-						rs.add(object);
-					}
-				
-				} else firstRow = false;
-				
-			}
+			while ((line = csvReader.readNext()) != null) {
+					if(!firstRow) {
+						var valuesList = Arrays.asList(line);
+						logger.info(Constants.CURRENT_LINE, valuesList);
+
+						SummaryVO object = listToObject(valuesList);
+							if(type.equals(Constants.UPDATE)) {
+								processUpdateSummaryVO(object, o, id, valuesList, rs);
+							} else if(type.equals(Constants.ADD)) {
+								processAddSummaryVO(object, id, valuesList, rs);
+							} else if(type.equals(Constants.DELETE) && !object.getId().equals(id)) {
+								rs.add(object);
+							}
+
+						} else
+							firstRow = false;
+
+				}
 			if(type.equals(Constants.ADD)) rs.add(o);
 			return rs;
 		} catch(Exception e) {
 			logger.error(Constants.EXCEPTION, e);
-			if(fileInPath==null) 
+			if(fileInPath==null)
 				logger.error("dependency missing");
 		}
 		return new ArrayList<>();
 	}
 
-	private void processUpdateSummaryVO(SummaryVO object, SummaryVO o, String id, String sCurrentLine, List<SummaryVO> rs){
+	private void processUpdateSummaryVO(SummaryVO object, SummaryVO o, String id, List<String> currentValues, List<SummaryVO> rs){
 		if(object.getId().equals(id)) {
-			logger.info(Constants.CURRENT_LINE, sCurrentLine);
+			logger.info(Constants.CURRENT_LINE, currentValues);
 			SummaryVO rsObject = updateObjectNullFields(object, o);
 			rs.add(rsObject);
 		} else {
@@ -128,9 +133,9 @@ public class SummaryDao{
 		}
 	}
 
-	private void processAddSummaryVO(SummaryVO object, String id, String sCurrentLine, List<SummaryVO> rs){
+	private void processAddSummaryVO(SummaryVO object, String id, List<String> currentValues, List<SummaryVO> rs){
 		if(object.getId().equals(id)) {
-			logger.info(Constants.CURRENT_LINE, sCurrentLine);
+			logger.info(Constants.CURRENT_LINE, currentValues);
 			validationMsg = "Summary already exist ...";
 			logger.info(validationMsg);
 			throw new IllegalStateException(validationMsg);
@@ -139,10 +144,8 @@ public class SummaryDao{
 		}
 	}
 	
-	//Makes a new string for the Entry to be written to the Print Writer
-	public String getAnEntry(SummaryVO o) {
-		List<String> list = objectToList(o);
-		return unsplit(list);
+	public String[] translateSummaryVOObjectToStringArray(SummaryVO o) {
+		return objectToStringArray(o);
 	}
 	
 	private SummaryVO updateObjectNullFields(SummaryVO existing, SummaryVO rs) {
@@ -157,59 +160,42 @@ public class SummaryDao{
 	}
 	
 	private int updateCSVPart2(List<SummaryVO> list) {
-		List<String> rs = new ArrayList<>();
-		
+		List<String[]> rs = new ArrayList<>();
+
+		var header = "ID,STUDENT_NAME,STATUS,MADE_A_DIFFERENCE,COVERED_VALUE,RECOMMENDATION,GENDER".split(",");
+		rs.add(header);
+
 		for(SummaryVO o: list) {
-			String entryString=getAnEntry(o);
-			if(!entryString.isEmpty()) rs.add(entryString);
+			var entryArray= translateSummaryVOObjectToStringArray(o);
+			if(entryArray.length != 0)
+					rs.add(entryArray);
 		}
-		
-		try(PrintWriter writer = new PrintWriter(fileInPath, StandardCharsets.UTF_8)) {
-			writer.println(Constants.HEADER);
-			for(String s: rs) {
-				writer.println(s);
+
+		return writeLineByLine(rs, Path.of(fileInPath));
+	}
+
+
+	private int writeLineByLine(List<String[]> lines, Path path) {
+		var result = 0;
+
+		try (CSVWriter writer = new CSVWriter(new FileWriter(path.toString()))) {
+			for (String[] line : lines) {
+				writer.writeNext(line);
 			}
-			logger.info("Finished Updating CSV file ... ");
-			return 1;
+			result = 1;
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			logger.error(Constants.EXCEPTION, e);
 		} catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-        return 0;
-	}
-	
-	private List<String> split(String in){
-		StringBuilder storedResult = new StringBuilder();
-		List<String> valuesList = new ArrayList<>();
-		boolean regular = true;
-		for(int i=0; i<in.length(); i++) {
-			if((in.charAt(i)!=',' && in.charAt(i)!='\"' && regular) || 
-			(in.charAt(i)!='\"' && !regular))  storedResult.append(in.charAt(i));
-			if(in.charAt(i)=='\"') regular = !regular;
-			if((in.charAt(i)==',' || i==in.length()-1) && regular) {
-				valuesList.add(storedResult.toString());
-				storedResult = new StringBuilder();
-			}
+			throw new IllegalArgumentException(e);
 		}
-		logger.info("valueList Once splited is ... {}", valuesList);
-		return valuesList;
+
+		return result;
 	}
-	
-	private String unsplit(List<String> in) {
-		StringBuilder rs = new StringBuilder();
-		for(String s: in) {
-			rs.append("\"").append(s).append("\",");
-		}
-		rs.deleteCharAt(rs.length()-1);
-		return rs.toString();
-	}
-	
-	private SummaryVO summaryObject;
 	
 	public SummaryVO listToObject(List<String> list) {
+		var summaryObject = new SummaryVO();
+
 		try {
-			summaryObject = new SummaryVO();
 			for(int i=0; i<list.size(); i++) {
 				int a = i+1;
 				if(a==1) {
@@ -219,13 +205,13 @@ public class SummaryDao{
 				} else if(a==3) {
 					summaryObject.setStatus(list.get(i));
 				} else if(a==4) {
-					setMadeDifference(list.get(i));
+					setMadeDifference(list.get(i), summaryObject);
 				} else if(a==5) {
 					summaryObject.setCoveredValue(list.get(i));
 				} else if(a==6) {
 					summaryObject.setRecommendation(list.get(i));
 				} else if(a==7) {
-					setGender(list.get(i));
+					setGender(list.get(i), summaryObject);
 				}
 			}
 			logger.info("List to object is ... ");
@@ -236,18 +222,26 @@ public class SummaryDao{
 		}
 	}
 	
-	public List<String> objectToList(SummaryVO o){
-		List<String> rs = new ArrayList<>();
+	public String[] objectToStringArray(SummaryVO o){
+		var rs = new String[7];
 		try {
-			rs.add(o.getId());
-			rs.add(o.getStudent());
-			rs.add(o.getStatus());
-			if(o.isMadeADifference()) rs.add("1");
-			else rs.add("0");
-			rs.add(o.getCoveredValue());
-			rs.add(o.getRecommendation());
-			if(o.getGender().equals("he")) rs.add("M");
-			else if(o.getGender().equals("she")) rs.add("F");
+			rs[0] = o.getId();
+			rs[1] = o.getStudent();
+			rs[2] = o.getStatus();
+
+			if(o.isMadeADifference())
+				rs[3] = "1";
+			else
+				rs[3] = "0";
+
+			rs[4] = o.getCoveredValue();
+			rs[5] = o.getRecommendation();
+
+			if("he".equalsIgnoreCase(o.getGender()))
+				rs[6] = "M";
+			if("she".equalsIgnoreCase(o.getGender()))
+				rs[6] = "F";
+
 		} catch(Exception e) {
 			logger.error(Constants.EXCEPTION, e);
 		}
@@ -255,14 +249,18 @@ public class SummaryDao{
 		return rs;
 	}
 	
-	private void setMadeDifference(String in) {
-		if(in.equals("1")) summaryObject.setMadeADifference(true);
-		if(in.equals("0")) summaryObject.setMadeADifference(false);
+	private void setMadeDifference(String in, SummaryVO summaryObject) {
+		if(in.equals("1"))
+			summaryObject.setMadeADifference(true);
+		if(in.equals("0"))
+			summaryObject.setMadeADifference(false);
 	}
 
-	private void setGender(String in) {
-		if(in.equalsIgnoreCase("M")) summaryObject.setGender("he");
-		if(in.equalsIgnoreCase("F")) summaryObject.setGender("she");
+	private void setGender(String in, SummaryVO summaryObject) {
+		if("M".equalsIgnoreCase(in))
+			summaryObject.setGender("he");
+		if("F".equalsIgnoreCase(in))
+			summaryObject.setGender("she");
 	}
 
 	public void setFileInPath(String fileInPath) {

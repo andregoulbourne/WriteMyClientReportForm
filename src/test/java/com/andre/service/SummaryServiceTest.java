@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,10 +25,17 @@ class SummaryServiceTest {
 	
 	private static final String id = "1";
 	private static final SummaryVO o = new SummaryVO();
-	
+
+	private AutoCloseable autoCloseable;
+
 	@BeforeEach
 	void setup() {
-		MockitoAnnotations.openMocks(this);
+		autoCloseable = MockitoAnnotations.openMocks(this);
+	}
+
+	@AfterEach
+	void close() throws Exception {
+		autoCloseable.close();
 	}
 	
 	@Test

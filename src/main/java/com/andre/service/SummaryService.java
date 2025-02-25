@@ -20,7 +20,7 @@ public class SummaryService {
 		this.dao=dao;
 	}
 	
-	private SummaryDao dao;
+	private final SummaryDao dao;
 	
 	private static final Logger logger = LoggerFactory.getLogger(SummaryService.class);
 	

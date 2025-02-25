@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,19 +22,26 @@ class SummaryDaoTest {
 	
 	private SummaryVO object1;
 	private SummaryVO object;
-	
+
+	private AutoCloseable autoCloseable;
+
 	@BeforeEach
 	void setup() {
-		MockitoAnnotations.openMocks(this);
+		autoCloseable = MockitoAnnotations.openMocks(this);
 	}
-	
+
+	@AfterEach
+	void close() throws Exception {
+		autoCloseable.close();
+	}
+
 	@Test
 	void testSummaryDaoFile_returnsListSummaryObjects() {
 		
 		assertDoesNotThrow(() -> reader.readCSVFile(null, Constants.ALL));
 		
 		reader.setFileInPath("./src/test/resources/Summarys.csv");
-		
+
 		List<SummaryVO> expected = new ArrayList<>();
 		expected.add(object);
 		expected.add(object1);
@@ -131,7 +139,7 @@ class SummaryDaoTest {
 		SummaryVO o = new SummaryVO();
 		o.setCoveredValue(null);
 		// Null pointer is thrown trying to check if a string value is equal to a non initiated value
-		assertDoesNotThrow(() -> reader.objectToList(new SummaryVO()));
+		assertDoesNotThrow(() -> reader.objectToStringArray(new SummaryVO()));
 		
 		assertDoesNotThrow(() -> reader.listToObject(null));
 	}
