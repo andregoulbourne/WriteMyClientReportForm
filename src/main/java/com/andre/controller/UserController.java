@@ -20,23 +20,28 @@ import com.andre.model.User;
 import com.andre.model.UserDTO;
 import com.andre.service.UserService;
 
-
+/**
+ * UserController is a REST controller that handles HTTP requests related to User operations.
+ * It provides endpoints for creating, retrieving, updating, and deleting User entities.
+ */
 @RestController
-//@CrossOrigin(origins = "http://localhost:4200/")
 @RequestMapping("users")
 public class UserController {
 	
+    private final IUser repo;
+    private final UserService service;
+
     @Autowired
-    IUser repo;
+    public UserController(IUser repo, UserService service) {
+        this.repo = repo;
+        this.service = service;
+    }
     
-    @Autowired
-    UserService service;
-    
-    private static Logger logger = LogManager.getLogger(UserController.class);
+    private static final Logger logger = LogManager.getLogger(UserController.class);
     
     /**
      * Creates a new User in the database
-     * @param User new User being created
+     * @param userDto new User being created
      * @return the representation of the User with its newly generated primary key.
      */
     @PostMapping
@@ -72,7 +77,7 @@ public class UserController {
     
     /**
      * Retrieves an User based on the given ID
-     * @param username of the User
+     * @param userDto of the User
      * @return Single User found
      */
     @PostMapping("/login")
@@ -90,13 +95,12 @@ public class UserController {
     
 	/**
 	 * 
-	 * @param id     of already existing user
-	 * @param user with changes to update
+	 * @param userDTO the user to be updated
 	 * @return the newly changed user
 	 */
 	@PutMapping
 	public User putUser(@RequestBody UserDTO userDTO) {
-		User user = null;
+		User user;
 		try {
 			user = new User(userDTO.getId(), userDTO.getUsername(), userDTO.getPwd(), userDTO.getFirstName(),
 					userDTO.getLastName(), userDTO.getMiddleName(), userDTO.getEmailId(), userDTO.getPhone(), userDTO.isAdmin(), userDTO.isVendor());
@@ -120,7 +124,7 @@ public class UserController {
 
     /**
      * Deletes the associated user
-     * @param UserId ID of the about me being deleted
+     * @param userId ID of the about me being deleted
      */
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable(name = "id") int userId) {

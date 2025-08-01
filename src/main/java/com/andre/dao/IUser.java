@@ -7,6 +7,6 @@ import com.andre.model.User;
 
 @Repository
 public interface IUser extends JpaRepository<User, Integer>{
-	public User findByUsername(String username);
-	public User findByEmailId(String emailId);
+	User findByUsername(String username);
+	User findByEmailId(String emailId);
 }
