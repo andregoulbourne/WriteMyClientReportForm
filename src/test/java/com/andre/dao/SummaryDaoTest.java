@@ -46,8 +46,6 @@ class SummaryDaoTest {
 		expected.add(object);
 		expected.add(object1);
 		
-		
-		System.out.println(expected);
 		List<SummaryVO> actual = reader.readCSVFile(null, Constants.ALL);
 		assertEquals(expected.size(), actual.size());
 		assertEquals("definition of derivatives using limits and implicit differentiation", actual.get(0).getCoveredValue());

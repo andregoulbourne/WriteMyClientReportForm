@@ -23,8 +23,8 @@ class SummaryServiceTest {
 	@Mock
 	private SummaryDao dao;
 	
-	private static final String id = "1";
-	private static final SummaryVO o = new SummaryVO();
+	private static final String ID = "1";
+	private static final SummaryVO SUMMARY_VO = new SummaryVO();
 
 	private AutoCloseable autoCloseable;
 
@@ -46,39 +46,48 @@ class SummaryServiceTest {
 		assertEquals(rs,service.getAllSummary());
 	}
 	
-	
+
 	
 	@Test
 	void testGetASummary() {
 		SummaryVO rs = new SummaryVO();
-		Mockito.when(dao.readCSVFileSingleEntry(id)).thenReturn(rs);
+		Mockito.when(dao.readCSVFileSingleEntry(ID)).thenReturn(rs);
 		
-		assertEquals(rs,service.getASummary(id));
+		assertEquals(rs,service.getASummary(ID));
 	}
-	
+
 	@Test
 	void testUpdateSummary_fail() {
-		assertEquals(0,service.updateSummary(o));
+		assertEquals(0,service.updateSummary(SUMMARY_VO));
 	}
 	@Test
 	void testUpdateSummary_success() {
-		Mockito.when(dao.csvFileEntry(o, Constants.UPDATE)).thenReturn(1);
+		Mockito.when(dao.csvFileEntry(SUMMARY_VO, Constants.UPDATE)).thenReturn(1);
 		
-		assertEquals(1,service.updateSummary(o));
+		assertEquals(1,service.updateSummary(SUMMARY_VO));
 	}
 	
 	@Test
 	void testAddSummary() {
-		Mockito.when(dao.csvFileEntry(o, Constants.ADD)).thenReturn(1);
+		Mockito.when(dao.csvFileEntry(SUMMARY_VO, Constants.ADD)).thenReturn(1);
 		
-		assertEquals(1,service.addSummary(o));
+		assertEquals(1,service.addSummary(SUMMARY_VO));
 	}
 	
 	@Test
 	void testDeleteSummary() {
-		Mockito.when(dao.csvFileEntry(o, Constants.DELETE)).thenReturn(1);
+		Mockito.when(dao.csvFileEntry(SUMMARY_VO, Constants.DELETE)).thenReturn(1);
 		
-		assertEquals(1,service.deleteSummary(o));
+		assertEquals(1,service.deleteSummary(SUMMARY_VO));
 	}
 	
+	@Test
+	void testGetValidationMsg() {
+		String expectedMsg = "Expected Message";
+
+		Mockito.when(dao.getValidationMsg())
+			.thenReturn(expectedMsg);
+
+		assertEquals(expectedMsg, service.getValidationMsg());
+	}
 }
