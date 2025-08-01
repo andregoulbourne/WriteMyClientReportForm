@@ -2,11 +2,17 @@ package com.andre.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+/**
+ * User is a JPA entity representing a user in the system.
+ * It contains fields for user details such as username, password, first name, last name, email, phone number,
+ * and flags for admin and vendor status.
+ */
 
 @Entity
 @Table(name = "users")
