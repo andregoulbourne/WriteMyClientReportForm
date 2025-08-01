@@ -5,74 +5,89 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.mockito.MockitoAnnotations;
 
 import com.andre.constants.Constants;
 import com.andre.dao.SummaryDao;
 import com.andre.model.SummaryVO;
 
 class SummaryServiceTest {
-	
-	private SummaryService service = new SummaryService();
+	@InjectMocks
+	private SummaryService service;
+	@Mock
 	private SummaryDao dao;
 	
+	private static final String ID = "1";
+	private static final SummaryVO SUMMARY_VO = new SummaryVO();
+
+	private AutoCloseable autoCloseable;
+
 	@BeforeEach
 	void setup() {
-		dao = Mockito.mock(SummaryDao.class);
+		autoCloseable = MockitoAnnotations.openMocks(this);
+	}
+
+	@AfterEach
+	void close() throws Exception {
+		autoCloseable.close();
 	}
 	
 	@Test
 	void testGetAllSummary(){
 		List<SummaryVO> rs = new ArrayList<>();
 		Mockito.when(dao.readCSVFile(null, Constants.ALL)).thenReturn(rs);
-		ReflectionTestUtils.setField(service,"dao", dao); 
 		
 		assertEquals(rs,service.getAllSummary());
 	}
 	
-	private static final String id = "1";
+
 	
 	@Test
 	void testGetASummary() {
 		SummaryVO rs = new SummaryVO();
-		Mockito.when(dao.readCSVFileSingleEntry(id)).thenReturn(rs);
-		ReflectionTestUtils.setField(service,"dao", dao); 
+		Mockito.when(dao.readCSVFileSingleEntry(ID)).thenReturn(rs);
 		
-		assertEquals(rs,service.getASummary(id));
+		assertEquals(rs,service.getASummary(ID));
 	}
-	
-	private static final SummaryVO o = new SummaryVO();
-	
+
 	@Test
-	void testUpdateSummary() {
+	void testUpdateSummary_fail() {
+		assertEquals(0,service.updateSummary(SUMMARY_VO));
+	}
+	@Test
+	void testUpdateSummary_success() {
+		Mockito.when(dao.csvFileEntry(SUMMARY_VO, Constants.UPDATE)).thenReturn(1);
 		
-		ReflectionTestUtils.setField(service,"dao", dao);
-		
-		assertEquals(0,service.updateSummary(o));
-		
-		Mockito.when(dao.csvFileEntry(o, Constants.UPDATE)).thenReturn(1);
-		ReflectionTestUtils.setField(service,"dao", dao); 
-		
-		assertEquals(1,service.updateSummary(o));
+		assertEquals(1,service.updateSummary(SUMMARY_VO));
 	}
 	
 	@Test
 	void testAddSummary() {
-		Mockito.when(dao.csvFileEntry(o, Constants.ADD)).thenReturn(1);
-		ReflectionTestUtils.setField(service,"dao", dao); 
+		Mockito.when(dao.csvFileEntry(SUMMARY_VO, Constants.ADD)).thenReturn(1);
 		
-		assertEquals(1,service.addSummary(o));
+		assertEquals(1,service.addSummary(SUMMARY_VO));
 	}
 	
 	@Test
 	void testDeleteSummary() {
-		Mockito.when(dao.csvFileEntry(o, Constants.DELETE)).thenReturn(1);
-		ReflectionTestUtils.setField(service,"dao", dao); 
+		Mockito.when(dao.csvFileEntry(SUMMARY_VO, Constants.DELETE)).thenReturn(1);
 		
-		assertEquals(1,service.deleteSummary(o));
+		assertEquals(1,service.deleteSummary(SUMMARY_VO));
 	}
 	
+	@Test
+	void testGetValidationMsg() {
+		String expectedMsg = "Expected Message";
+
+		Mockito.when(dao.getValidationMsg())
+			.thenReturn(expectedMsg);
+
+		assertEquals(expectedMsg, service.getValidationMsg());
+	}
 }

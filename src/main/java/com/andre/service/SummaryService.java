@@ -3,7 +3,8 @@ package com.andre.service;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,20 +12,28 @@ import com.andre.constants.Constants;
 import com.andre.dao.SummaryDao;
 import com.andre.model.SummaryVO;
 
+/**
+ * SummaryService provides methods to interact with SummaryDao for CRUD operations on SummaryVO objects.
+ * It sets the data path for the CSV file and handles the business logic for summary operations.
+ */
 @Service
 public class SummaryService {
 	
 	@Autowired
-	private SummaryDao dao;
+	public SummaryService(SummaryDao dao) {
+		this.dao=dao;
+	}
 	
-	private static final Logger logger = Logger.getLogger(SummaryService.class);
+	private final SummaryDao dao;
+	
+	private static final Logger logger = LoggerFactory.getLogger(SummaryService.class);
 	
 	private void setDataPath() {
 		try {
 			String currentPath = new java.io.File(".").getCanonicalPath();
 			dao.setFileInPath(currentPath+"/src/main/resources/Summarys.csv");
 		} catch (IOException e) {
-			logger.error(e);
+			logger.error(Constants.EXCEPTION, e);
 		}
 	}
 	

@@ -1,5 +1,9 @@
 package com.andre.constants;
 
+/**
+ * Constants class to hold constant values used across the application.
+ * This class is not meant to be instantiated.
+ */
 public class Constants {
 	
 	private Constants() {
@@ -17,7 +21,7 @@ public class Constants {
 	
 	public static final String DELETE = "delete";
 	
-	public static final String CURRENTLINE = "current Line Is ... %s";
+	public static final String CURRENT_LINE = "current Line Is ... {}";
 	
 	public static final String EXCEPTION = "An Exception occured ...";
 	
