@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import com.andre.constants.Constants;
 import com.andre.model.SummaryVO;
 
+/**
+ * WriteCommentService is responsible for generating comments based on a list of SummaryVO objects.
+ * It formats the comments according to a predefined template and logs the process.
+ */
+
 @Service
 public class WriteCommentService {
 	

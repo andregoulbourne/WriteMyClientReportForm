@@ -22,6 +22,12 @@ import com.andre.service.SummaryService;
 import com.andre.service.WriteCommentService;
 import com.andre.template.ControllerTemplate;
 
+/**
+ * SummaryController handles requests related to summaries.
+ * It allows for retrieving, updating, adding, and deleting summaries,
+ * as well as writing comments based on the summaries.
+ */
+
 @RestController
 @RequestMapping("summarys")
 public class SummaryController extends ControllerTemplate {

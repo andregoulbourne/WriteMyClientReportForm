@@ -11,6 +11,10 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * CorsFilter is a filter that adds CORS headers to the HTTP response.
+ * It allows cross-origin requests from any origin and supports various HTTP methods and headers.
+ */
 @Component
 @WebFilter("/*")
 public class CorsFilter extends OncePerRequestFilter {
