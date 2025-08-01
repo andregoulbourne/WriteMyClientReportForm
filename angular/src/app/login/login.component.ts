@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { User } from '../models/user';
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
