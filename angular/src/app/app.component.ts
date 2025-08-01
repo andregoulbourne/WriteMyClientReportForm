@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { HttpClient, HttpParams} from '@angular/common/http';
 import { AgGridAngular } from 'ag-grid-angular';
 import { CellValueChangedEvent } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -24,7 +25,7 @@ export class AppComponent {
 
   rowData: any;
 
-  constructor(private _http: HttpClient) { }
+  constructor(private readonly _http: HttpClient) { }
 
   ngOnInit() {
     this._http.get<any>('http://localhost:8081/summarys')
@@ -37,17 +38,17 @@ export class AppComponent {
 
   writeComment() {
     let selectedData = this.getSelectedSummary();
-    
+
     this._http.post<any>('http://localhost:8081/summarys/writeAComment.do', selectedData/*JSON.stringify(selectedData),  {headers: {'Content-Type':'application/json'}}*/)
     .subscribe((data) => {
       this.tutorComment= data.comment;
     });
   }
-  
+
   private getSelectedSummary() {
 	const selectedNodes = this.agGrid?.api.getSelectedNodes();
     const selectedData = selectedNodes?.map(node => node.data);
-    
+
     return selectedData;
   }
 
@@ -60,11 +61,11 @@ export class AppComponent {
         else alert('Update has failed ...')
       })
   }
-  
+
   addDefaultInitializedSummary(){
 	console.log("Adding Default Summary ...")
 	const summary = {id: this.getMaxIdNumber()+1, student: '', status: '', madeADifference: true, coveredValue: '', recomendation: '', gender:'F'};
-	
+
 	this._http.post<any>('http://localhost:8081/summarys',summary)
       .subscribe((data)=>{
         if(data.msg=="SUCCESS"){
@@ -73,24 +74,24 @@ export class AppComponent {
         } else alert('Insert has failed ...')
       })
   }
-  
+
   private getMaxIdNumber(){
 	let maxId = 0;
 	for (let summary of this.rowData) {
 	  let currentId = parseInt(summary.id);
-	  
-	  if(currentId > maxId) 
-	  	maxId = currentId; 
+
+	  if(currentId > maxId)
+	  	maxId = currentId;
 	}
-	
+
 	return maxId;
   }
-  
+
   deleteSummary(){
 	console.log("Deleting Summary ...")
-	
+
 	let selectedData = this.getSelectedSummary();
-	
+
 	selectedData?.forEach( (summary: any) => {
 		let httpParams = new HttpParams();
 		httpParams = httpParams.set('id', summary.id);
@@ -105,4 +106,3 @@ export class AppComponent {
   }
 
 }
-

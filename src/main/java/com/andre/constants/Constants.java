@@ -17,7 +17,7 @@ public class Constants {
 	
 	public static final String DELETE = "delete";
 	
-	public static final String CURRENTLINE = "current Line Is ... %s";
+	public static final String CURRENT_LINE = "current Line Is ... {}";
 	
 	public static final String EXCEPTION = "An Exception occured ...";
 	

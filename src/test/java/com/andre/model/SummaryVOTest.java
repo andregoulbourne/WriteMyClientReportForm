@@ -1,6 +1,6 @@
 package com.andre.model;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,8 +55,8 @@ class SummaryVOTest {
 	@Test
 	void testGetterAndSetters_setAnotherRecomendation() {
 		String expectedResult = "1";
-		summaryObject.setRecomendation("1");
-		assertEquals(expectedResult, summaryObject.getRecomendation());
+		summaryObject.setRecommendation("1");
+		assertEquals(expectedResult, summaryObject.getRecommendation());
 	}
 	
 	@Test
