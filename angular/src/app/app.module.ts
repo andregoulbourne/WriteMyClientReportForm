@@ -22,10 +22,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    AgGridModule.withComponents([]),
-    HttpClientModule
+    AgGridModule
   ],
-  providers: [],
+  providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
