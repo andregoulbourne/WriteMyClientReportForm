@@ -4,6 +4,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { CellValueChangedEvent } from 'ag-grid-community';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -105,4 +106,3 @@ export class AppComponent {
   }
 
 }
-

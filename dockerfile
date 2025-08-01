@@ -1,5 +1,5 @@
 
-FROM node:14.17.3-buster AS nodebuild
+FROM node:22.14.0-buster AS nodebuild
 
 WORKDIR /Frontend
 
