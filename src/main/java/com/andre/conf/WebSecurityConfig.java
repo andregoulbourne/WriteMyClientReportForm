@@ -23,6 +23,19 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    /**
+     * The ALLOWED_ORIGINS array defines the origins that are allowed to make CORS requests.
+     * It includes the Angular frontend and the Spring Boot backend.
+     */
+    private static final String[] ALLOWED_ORIGINS = {
+            "http://localhost:4200", // Angular frontend
+            "http://localhost:8081"  // Spring Boot backend
+    };
+
+    /**
+     * The ALLOWED_HEADERS array defines the headers that are allowed in CORS requests.
+     * It includes common headers such as Authorization, Content-Type, and others.
+     */
     private final String[] ALLOWED_HEADERS = {
             "Access-Control-Allow-Headers", "Authorization, x-xsrf-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, " +
             "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"
@@ -46,7 +59,7 @@ public class WebSecurityConfig {
 
     UrlBasedCorsConfigurationSource myWebsiteConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedOrigins(Arrays.asList(ALLOWED_ORIGINS));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("*"));

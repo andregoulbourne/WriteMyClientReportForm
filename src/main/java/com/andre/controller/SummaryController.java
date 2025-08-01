@@ -43,7 +43,12 @@ public class SummaryController extends ControllerTemplate {
 	private final WriteCommentService writeCommentService;
 	
 	private final SummaryService summaryService;
-	
+
+	/**
+	 * Retrieves all summaries.
+	 *
+	 * @return a map containing the list of summaries and a success message.
+	 */
 	@GetMapping
 	public Map<String, Object> getAllSummarys(){
 		respMap = new HashMap<>();
@@ -61,7 +66,13 @@ public class SummaryController extends ControllerTemplate {
 		return respMap;
 		
 	}
-	
+
+	/**
+	 * Retrieves a summary by its ID.
+	 *
+	 * @param summary {@link SummaryVO} summary the summary object containing the ID.
+	 * @return a map containing the summary and a success message.
+	 */
 	@PostMapping("/updateSummary.do")
 	public Map<String, Object> updateASummary(@RequestBody SummaryVO summary){
 		respMap = new HashMap<>();
@@ -79,7 +90,13 @@ public class SummaryController extends ControllerTemplate {
 		return respMap;
 		
 	}
-	
+
+	/**
+	 * Adds a new summary.
+	 *
+	 * @param summary {@link SummaryVO} summary the summary object to be added.
+	 * @return a map containing the status and a success or error message.
+	 */
 	@PostMapping
 	public Map<String, Object> addASummary(@RequestBody SummaryVO summary){
 		respMap = new HashMap<>();
@@ -104,7 +121,13 @@ public class SummaryController extends ControllerTemplate {
 		
 		summaryService.setValidationMsg(null);
 	}
-	
+
+	/**
+	 * Deletes a summary by its ID.
+	 *
+	 * @param id the ID of the summary to be deleted.
+	 * @return a map containing the status and a success or error message.
+	 */
 	@PostMapping("/deleteSummary.do")
 	public Map<String, Object> deleteASummary(@RequestParam("id") String id){
 		respMap = new HashMap<>();
@@ -125,7 +148,13 @@ public class SummaryController extends ControllerTemplate {
 		return respMap;
 		
 	}
-	
+
+	/**
+	 * Writes a comment based on the provided summaries.
+	 *
+	 * @param summarys a list of {@link SummaryVO} summaries containing the comments to be written.
+	 * @return a map containing the list of summaries, the status of the comment writing operation, and a success message.
+	 */
 	@PostMapping("/writeAComment.do")
 	public Map<String, Object> writeAComment(@RequestBody List<SummaryVO> summarys){
 		respMap = new HashMap<>();
