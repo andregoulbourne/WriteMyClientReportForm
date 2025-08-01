@@ -4,6 +4,12 @@ import java.util.Map;
 
 import com.andre.exceptions.ArraysAreNotTheSameSizeException;
 
+/**
+ * ControllerTemplate provides a base class for controllers,
+ * allowing them to manage a response map and handle common operations.
+ * It includes a method to put entries into the response map,
+ * ensuring that the keys and values arrays are of the same size.
+ */
 public class ControllerTemplate {
 	
 	protected Map<String,Object> respMap;

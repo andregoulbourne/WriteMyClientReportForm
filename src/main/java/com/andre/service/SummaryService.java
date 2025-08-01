@@ -12,6 +12,10 @@ import com.andre.constants.Constants;
 import com.andre.dao.SummaryDao;
 import com.andre.model.SummaryVO;
 
+/**
+ * SummaryService provides methods to interact with SummaryDao for CRUD operations on SummaryVO objects.
+ * It sets the data path for the CSV file and handles the business logic for summary operations.
+ */
 @Service
 public class SummaryService {
 	

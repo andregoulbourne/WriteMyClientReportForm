@@ -1,5 +1,9 @@
 package com.andre.constants;
 
+/**
+ * Constants class to hold constant values used across the application.
+ * This class is not meant to be instantiated.
+ */
 public class Constants {
 	
 	private Constants() {

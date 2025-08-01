@@ -1,5 +1,10 @@
 package com.andre.model;
 
+/**
+ * SummaryVO represents a summary of a student's performance in a subject.
+ * It includes the student's ID, name, status, whether the session made a difference,
+ * the value covered during the session, and recommendations for future improvement.
+ */
 public class SummaryVO {
 	
 	private String id;

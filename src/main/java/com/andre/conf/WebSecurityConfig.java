@@ -13,6 +13,12 @@ import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * WebSecurityConfig is a configuration class for Spring Security.
+ * It sets up CORS (Cross-Origin Resource Sharing) and HTTP Basic authentication.
+ * This configuration allows requests from specific origins and methods.
+ */
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -27,7 +33,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain myOtherFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors((cors) -> cors
+                .cors(cors -> cors
                         .configurationSource(myWebsiteConfigurationSource())
                 )
                 .authorizeHttpRequests(auth ->

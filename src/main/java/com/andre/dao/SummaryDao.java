@@ -16,6 +16,12 @@ import org.springframework.stereotype.Repository;
 import com.andre.constants.Constants;
 import com.andre.model.SummaryVO;
 
+/**
+ * SummaryDao is responsible for reading and writing SummaryVO objects to a CSV file.
+ * It provides methods to read all entries, read a single entry by id, and update/add/delete entries.
+ * The CSV file is expected to have a specific format with headers.
+ */
+
 @Repository
 public class SummaryDao{
 	
@@ -25,7 +31,15 @@ public class SummaryDao{
 
 	private String validationMsg;
 
-
+	/**
+	 * Reads a CSV file and returns a list of SummaryVO objects.
+	 * If 'id' is provided, it returns a single entry matching that id if 'type' is SINGLE.
+	 * If 'type' is ALL, it returns all entries in the CSV file.
+	 *
+	 * @param id   the id to filter by (can be null)
+	 * @param type the type of operation (ALL or SINGLE)
+	 * @return a list of SummaryVO objects
+	 */
 	public List<SummaryVO> readCSVFile(String id, String type) {
 
 		try (Reader reader = Files.newBufferedReader(Path.of(fileInPath)); CSVReader csvReader = new CSVReader(reader)) {
@@ -60,7 +74,13 @@ public class SummaryDao{
 		return new ArrayList<>();
 	}
 	
-	
+	/**
+	 * Reads a CSV file and returns a single SummaryVO object based on the provided id.
+	 * This method is used when the type is SINGLE.
+	 *
+	 * @param id the id of the entry to retrieve
+	 * @return a SummaryVO object corresponding to the given id
+	 */
 	public SummaryVO readCSVFileSingleEntry(String id) {
 		try {
 			return readCSVFile(id, Constants.SINGLE).get(0);
@@ -69,7 +89,14 @@ public class SummaryDao{
 		}
 		return new SummaryVO();
 	}
-	
+	/**
+	 * Updates, adds, or deletes a SummaryVO entry in the CSV file based on the provided type.
+	 * Returns the number of entries updated, added, or deleted.
+	 *
+	 * @param o    the {@link SummaryVO summaryVo} object to process
+	 * @param type the type of operation (ADD, UPDATE, DELETE)
+	 * @return the number of entries affected by the operation
+	 */
 	public int csvFileEntry(SummaryVO o, String type) {
 		List<SummaryVO> rs = null;
 		if(o==null) return 0;
@@ -144,7 +171,7 @@ public class SummaryDao{
 		}
 	}
 	
-	public String[] translateSummaryVOObjectToStringArray(SummaryVO o) {
+	private String[] translateSummaryVOObjectToStringArray(SummaryVO o) {
 		return objectToStringArray(o);
 	}
 	
@@ -192,7 +219,7 @@ public class SummaryDao{
 		return result;
 	}
 	
-	public SummaryVO listToObject(List<String> list) {
+	private SummaryVO listToObject(List<String> list) {
 		var summaryObject = new SummaryVO();
 
 		try {
@@ -222,7 +249,7 @@ public class SummaryDao{
 		}
 	}
 	
-	public String[] objectToStringArray(SummaryVO o){
+	private String[] objectToStringArray(SummaryVO o){
 		var rs = new String[7];
 		try {
 			rs[0] = o.getId();
@@ -263,6 +290,10 @@ public class SummaryDao{
 			summaryObject.setGender("she");
 	}
 
+	/**
+	 * @param fileInPath
+	 * Sets the file path where the CSV file is stored.
+	 */
 	public void setFileInPath(String fileInPath) {
 		this.fileInPath = fileInPath;
 	}
